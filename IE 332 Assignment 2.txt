@@ -1,6 +1,2 @@
 IE 332 Assignment 2
-<<<<<<< HEAD
-hello
-=======
-iii
->>>>>>> 1213c1d08214fc14f31fc6e7312b5175e24bef0a
+iiihhh
