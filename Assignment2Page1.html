@@ -9,32 +9,41 @@
         background-color: aqua;
         width: 500px;
         float: left;
+        padding: 20px;
+        box-sizing: border-box;
+        height:500px;
     }
 
-    .righttopdiv {
+    .rightdiv {
         background-color: green;
-        width:500px;
-        height: 500px;
-        float: right;
+        width:100%;
+        float: none;
+        padding: 20px;
+        box-sizing: border-box;
+        height:250px;
+        overflow-y: auto;
+        box-sizing: border-box;
     }
 
-    .rightbottomdiv {
-        background-color: purple;
+    .rightcontent {
         width: 500px;
-        height: 500px;
         float: right;
     }
     
     .content {
        width: 1000px;
        margin: 0 auto; 
+       border: 1px solid #ccc; 
+       overflow: hidden
     }
 
     .innercontent {
         display: flex;
     }
 
-
+    .clear {
+        clear:both;
+    }
 
 </style>
 </head>
@@ -42,6 +51,43 @@
 
 <div class = "content">
     <h1 id="header"> header </h1>
+
+    <div class = "innercontent">
+        <div class = "maindiv">
+            <p> left hand division </p>
+        </div>
+        
+        <div class = "rightcontent">
+            
+            <div class = "rightdiv">
+                <p> top right division </p>
+            </div>
+
+            <div class = "rightdiv">
+                <p> bottom right division </p>
+                <ul>
+                    <li>List item 1</li>
+                    <li>List item 2</li>
+                    <li>List item 3</li>
+                    <li>List item 4</li>
+                    <li>List item 5</li>
+                    <li>List item 6</li>
+                    <li>List item 7</li>
+                    <li>List item 8</li>
+                    <li>List item 9</li>
+                    <li>List item 10</li>
+                    <li>List item 11</li>
+                    <li>List item 12</li>
+                    <li>List item 13</li>
+                    <li>List item 14</li>
+                    <li>List item 15</li>
+                  </ul>
+            </div>
+
+        </div>
+        <div class="clear"></div>
+    </div>
+
 </div>
 
 </body>
