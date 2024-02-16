@@ -13,7 +13,7 @@
             <div class="left column">
                     <form class="radio-container">
                         <div class="radio">
-                            <input class="radio-inputs" type="radio" id="letter-radio" name="option" value="letter" checked>
+                            <input class="radio-inputs" type="radio" id="letter-radio" name="option" value="letter">
                             <label for="letter">Letter</label>
                         </div>
                         <div class="radio">
@@ -22,11 +22,11 @@
                         </div>
                     </form>
                     <div class="dropdown">
-                        <select name="word-categories" id="select-menu">
-    --color-beaver: #A18276;
-                            <option style="background-color:  #888" value="letters">All Letters</option>
-                            <option style="background-color: #888" value="vowels">Vowels</option>
-                            <option style="background-color:  #888" value="consonants">Consonants</option>
+                        <select name="word-categories" id="select-menu" class="hide-select">
+                            <option value="" disabled selected>Select</option>
+                            <option value="letters">All Letters</option>
+                            <option value="vowels">All Vowels</option>
+                            <option value="consonants">All Consonants</option>
                         </select>
                     </div>
                     <textarea id="textarea" name="textarea" rows="15" cols="50"></textarea>
@@ -37,26 +37,25 @@
                     </div>
             </div>
             <div class="right column">
-                <div class="plot"></div>
+                <div class="plot">
+                    <canvas id="chart" width="485px" height="255px"></canvas>
+                </div>
                 <div class="table">
-                    <table>
+                    <table id="table">
                         <tr>
                             <th>Items</th>
                             <th>Count</th>
-                        </tr>
-                        <tr>
-                            <td>Row 1, Column 1</td>
-                            <td>Row 1, Column 2</td>
-                        </tr>
-                        <tr>
-                          <td>Row 2, Column 1</td>
-                          <td>Row 2, Column 2</td>
                         </tr>
                       </table>
                 </div>
             </div>
         </div>
     </div> 
-    <script src="./scripts/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="./scripts/createChart.js"></script>
+    <script type="module" src="./scripts/populateTable.js"></script>
+    <script type="module" src="./scripts/calculateFrequencies.js"></script>
+    <script type="module" src="./scripts/app.js"></script>
+
 </body>
 </html>

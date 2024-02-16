@@ -4,6 +4,7 @@ const radios = document.querySelectorAll('.radio-inputs');
 const selectMenu = document.getElementById('select-menu');
 const textarea = document.getElementById('textarea');
 
+let myChart = null; // Chart.js chart instance
 let mode = 'letter';
 let category = 'letters';
 
