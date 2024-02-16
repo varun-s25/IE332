@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="./assets/styles.css">
+    <title>Home Page</title>
+</head>
+<body>
+    <div class="banner"></div>   
+    <div class="primary-container">
+        <div class="secondary-container">
+            <div class="left column">
+                    <form class="radio-container">
+                        <div class="radio">
+                            <input class="radio-inputs" type="radio" id="letter-radio" name="option" value="letter" checked>
+                            <label for="letter">Letter</label>
+                        </div>
+                        <div class="radio">
+                            <input class="radio-inputs" type="radio" id="word-radio" name="option" value="word">
+                            <label for="word">Word</label>
+                        </div>
+                    </form>
+                    <div class="dropdown">
+                        <select name="word-categories" id="select-menu">
+                            <option style="color: red" value="letters">All Letters</option>
+                            <option value="vowels">All Vowels</option>
+                            <option value="consonants">All Consonants</option>
+                        </select>
+                    </div>
+                    <textarea id="textarea" name="textarea" rows="15" cols="50"></textarea>
+                    <div class="btn-container">
+                        <button class="primary-btn" id="reset-btn">Reset</button>
+                        <button class="primary-btn" id="update-btn">Update</button>
+                        <button class="primary-btn" id="gen-report-btn">Generate Report</button>
+                    </div>
+            </div>
+            <div class="right column">
+                <div class="plot">
+                    <canvas id="myChart" width="400" height="400"></canvas>
+                </div>
+                <div class="table">
+                    <table>
+                        <tr>
+                            <th>Items</th>
+                            <th>Count</th>
+                        </tr>
+                        <tr>
+                            <td>Row 1, Column 1</td>
+                            <td>Row 1, Column 2</td>
+                        </tr>
+                        <tr>
+                          <td>Row 2, Column 1</td>
+                          <td>Row 2, Column 2</td>
+                        </tr>
+                      </table>
+                </div>
+            </div>
+        </div>
+    </div> 
+    <script src="./scripts/app.js"></script>
+</body>
+</html>
