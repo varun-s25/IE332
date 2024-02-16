@@ -40,7 +40,7 @@ body::before {
     width: 1000px;
     height: 100vh;
     background-color: #333;
-    margin: auto;
+    margin: 0 auto;
     border-radius: 10px; /* Rounded corners */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
     padding-top: 140px;
@@ -49,13 +49,16 @@ body::before {
 .banner {
     position: fixed;
     top: 30px;
-    width: 100%; /* 5px padding from each side */
+    width: 1000px; /* 5px padding from each side */
     background-image: url('./banner.png'); /* Specify the URL of your image */
     background-size: cover; /* Ensures the image covers the entire banner */
     background-repeat: no-repeat; /* Prevents the image from repeating */
     height: 100px;
     z-index: 999; /* Ensure it appears above other content */
-  }
+    left: 0;
+    right: 0;
+    margin: auto;
+}
 
   .secondary-container {
     display: flex;
@@ -108,8 +111,12 @@ select {
     padding-right: 33px;
 }
 
-.disable-select {
-    color: #CBE89622;
+option {
+    background-color: #888;
+}
+
+.hide-select {
+    opacity: 0
 }
 
 textarea {
@@ -152,18 +159,30 @@ textarea {
     opacity: 1; /* Show overlay on hover */
   }
 
-  .plot {
+.plot {
     height: 260px;
     width: 100%;
-    border: 3px solid white;
+    margin-top: 60px;
   }
 
-  table {
+.table {
+    max-height: 200px;
+    overflow-x: auto;
+    overflow-y: auto;
+    width: 100%;
     border: 3px solid var(--color-mindaro);
     margin-top: 5px;
+}
 
+table {
+    width: 100%;
+    border-collapse: collapse;
   }
 
-  .table-left-col {
-    border-right: 1px solid var(--color-mindaro);
-  }
+
+.table th,
+.table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
