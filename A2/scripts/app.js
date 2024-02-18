@@ -30,16 +30,13 @@ const addEventListeners = () => {
         })
     }
 
-
     reportBtn.addEventListener('click', () => {
         const mode = getMode();
         const category = getCategory();
         const text = getText();
         // send what we have to the server-side script
         console.log(mode, category, text);
-
     })
-
 
     updateBtn.addEventListener('click', () => {
         const mode = getMode();
