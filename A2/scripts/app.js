@@ -35,6 +35,12 @@ const addEventListeners = () => {
         const category = getCategory();
         const text = getText();
         // send what we have to the server-side script
+
+        var textboxval = document.getElementById('textareabox').value; //get value from text box
+
+        window.textBoxData = textboxval; //set it to global variable textBoxData
+
+        window.location.href = 'report.php?data=' + encodeURIComponent(window.textBoxData); //putting data in url to send to report.php
         console.log(mode, category, text);
     })
 
