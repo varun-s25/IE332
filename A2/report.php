@@ -13,10 +13,7 @@
     <div class="primary-container">
         <div class="secondary-container">
             <div class="left column">
-                <?php
-                $textBoxData = $_GET('data');
-                echo "Data recieved from first page: " .$textBoxData;
-                ?>
+                
                     <h1>Top 10 <span id="modeDisplay"></span></h1>
                         <ul id="top10List">
                         <li>Frequency 1</li>
