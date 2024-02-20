@@ -9,6 +9,7 @@ const letterRadio = document.getElementById('letter-radio');
 const wordRadio = document.getElementById('word-radio');
 const selectMenu = document.getElementById('select-menu');
 const textArea = document.getElementById('textarea');
+const reportForm = document.getElementById('report-form');
 
 let mode = 'letter';
 let category = 'letters';
@@ -31,11 +32,20 @@ const addEventListeners = () => {
     }
 
     reportBtn.addEventListener('click', () => {
+        event.preventDefault();
         const mode = getMode();
         const category = getCategory();
         const text = getText();
-        // send what we have to the server-side script
+
+        const queryString = `?mode=${(mode)}&category=${(category)}&text=${encodeURIComponent(text)}`;
+
         console.log(mode, category, text);
+
+        window.location.href = 'report.php?reload=' + queryString;
+
+
+        // send what we have to the server-side script
+        
     })
 
     updateBtn.addEventListener('click', () => {
