@@ -19,17 +19,17 @@
                     
                     
                     // Check if the "mode" parameter is present in the query string
-                    if (isset($_GET['mode'])) {
+                    if (isset($_POST['mode'])) {
                         // Retrieve the value of the "mode" parameter
-                        $mode = $_GET['mode'];
+                        $mode = $_POST['mode'];
 
                         // Now you can use $mode as needed
                         echo "Mode: " . $mode;
                     } else {
                         // Handle the case where "mode" parameter is not provided
                         echo "Mode parameter not provided.";
-                      
-                   
+                        
+                        
                     }
                 ?>
                     <h1>Top 10 <span id="modeDisplay"></span></h1>

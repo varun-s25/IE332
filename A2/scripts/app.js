@@ -37,7 +37,7 @@ const addEventListeners = () => {
         const category = getCategory();
         const text = getText();
 
-        const queryString = `?mode=${(mode)}&category=${(category)}&text=${encodeURIComponent(text)}`;
+        const queryString = `?mode=${encodeURIComponent(mode)}&category=${encodeURIComponent(category)}&text=${encodeURIComponent(text)}`;
 
         console.log(mode, category, text);
 

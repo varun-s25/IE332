@@ -22,7 +22,7 @@
                             <input class="radio-inputs" type="radio" id="word-radio" name="option" value="word">
                             <label for="word">Word</label>
                         </div>
-                </form>
+                </div>
                     <div class="dropdown">
                         <select name="word-categories" id="select-menu" class="hide-select">
                             <option value="" disabled selected>Select</option>
