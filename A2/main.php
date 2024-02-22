@@ -31,13 +31,11 @@
                             <option value="consonants">All Consonants</option>
                         </select>
                     </div>
-                    <textarea type="text" id="textarea" name="textarea" rows="15" cols="50"></textarea>
+                    <textarea type="text" id="textarea" rows="15" cols="50"></textarea>
                     <div class="btn-container">
-                        <input type="Reset" name="reset-btn"
-                        value="Reset">
                         <button class="primary-btn" id="reset-btn" type="button">Reset</button>
                         <button class="primary-btn" id="update-btn" type="button">Update</button>
-                        <button class="primary-btn" id="gen-report-btn" type="submit">Generate Report</button>
+                        <button class="primary-btn" id="gen-report-btn" name="gen-report'btn" type="button">Generate Report</button>
                     </div>
                 </form>
             </div>
