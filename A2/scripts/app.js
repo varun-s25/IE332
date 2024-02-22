@@ -35,9 +35,6 @@ const addEventListeners = () => {
                 selectMenu.classList.remove('hide-select'); // hide the'select' option
             }
         // Send an HTTP request to the PHP page with the selected mode
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', 'report.php?mode=' + selectedMode, true);
-        xhr.send();
         })
     }
     // Add event listener to the report button

@@ -39,7 +39,7 @@
                                 echo "<p> {$_POST["textarea"]} </p>";
                                 echo "</div>";
                             } else {
-                                echo "Text input not provided";
+                                echo "Text input not provided.";
                             }
                         ?>        
                         
@@ -70,7 +70,7 @@
                    <original class= "original" id="original" name="original" rows="15" cols="50"></original>
                 </div>
                 <div>
-                    <encrypted class="encrypted" id="encrypted" name="encrypted" rows="15" cols="50"></encrypted>
+                    <encrypted class="encrypted" id="encrypted" name="encrypted" rows="15"> cols="50"></encrypted>
                 </div>
             </div>
         </div>
