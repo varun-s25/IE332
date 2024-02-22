@@ -5,6 +5,7 @@ export const createChart = (labels, values) => {
         labels: labels,
         datasets: [{
             label: "Frequency",
+            textColor: '#fff',
             backgroundColor: '#CBE896',
             borderColor: '#CBE896',
             data: values,
