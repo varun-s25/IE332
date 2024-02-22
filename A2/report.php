@@ -34,9 +34,17 @@
                     ?>
                     <div class= "title">
                         <?php
-                            if (isset($_POST[""])) {
+                            if (isset($_POST["gen-report-btn"])) {
                                 echo "<div>";
-                                echo "{$_POST["
+                                echo "<p> {$_POST["textarea"]} </p>";
+                                echo "</div>";
+                            } else {
+                                echo "Text input not provided";
+                            }
+                        ?>        
+                        
+                    
+
                     </div>      
                         <div class="list">
                         <li>1</li>
