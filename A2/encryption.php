@@ -30,7 +30,7 @@ function decryptText($encryptedText, $key) {
 }
 
 // Define secret key
-$key = "YourSecretKey123"; // Change this to your secret key
+$key = "YourSecretKey123"; 
 
 // Text to encrypt
 $plaintext = "Hello World";
