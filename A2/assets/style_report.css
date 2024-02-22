@@ -72,6 +72,7 @@ body::before {
 }
 
 .title {
+  width: 250px;
   padding-bottom: 20px;
   padding-left: 30px;
 
@@ -114,9 +115,9 @@ body::before {
     transition: opacity 0.3s ease; /* Transition for smooth effect */
   }
   
-  .primary-btn:hover::before {
+.primary-btn:hover::before {
     opacity: 1; /* Show overlay on hover */
-  }
+}
 
 .original{
     width: 400px;
