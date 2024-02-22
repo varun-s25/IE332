@@ -37,6 +37,7 @@
                         <button class="primary-btn" id="update-btn" type="button">Update</button>
                         <button class="primary-btn" id="gen-report-btn" name="gen-report'btn" type="button">Generate Report</button>
                     </div>
+
                 </form>
             </div>
             
