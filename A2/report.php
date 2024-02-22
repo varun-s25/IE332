@@ -11,7 +11,7 @@
     <div class="banner"></div>   
     <div class="primary-container">
         <div class="secondary-container">
-            <div class="left column">
+            <div class="left">
                 <?php
                     
                     error_reporting(E_ALL);
@@ -65,14 +65,13 @@
                             </a>
                          </div>
             </div>
-            <div class="right column">
+            <div class="right">
                 <div>
                    <original class= "original" id="original" name="original" rows="15" cols="50"></original>
                 </div>
                 <div>
                     <encrypted class="encrypted" id="encrypted" name="encrypted" rows="15" cols="50"></encrypted>
                 </div>
-            </div>
         </div>
     </div> 
     <script src="./scripts/app.js"></script>
