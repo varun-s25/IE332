@@ -31,9 +31,25 @@
                         
                         
                     }
-                ?>
-                    <h1>Top 10 <span id="modeDisplay"></span></h1>
-                        <ul id="top10List">
+                    ?>
+                    <?php
+                    // Check if the 'mode' parameter is set in the GET request
+                    if (isset($_GET['mode'])) {
+                        // Retrieve the mode value from the GET parameters
+                        $mode = $_GET['mode'];
+                    
+                        // Check the mode value and print accordingly
+                        if ($mode === 'word') {
+                            echo "<h1>Top 10 [Word Mode]</h1>";
+                        } else {
+                            echo "<h1>Top 10 [Letter Mode]</h1>";
+                        }
+                    } else {
+                        // Handle the case when 'mode' parameter is not provided
+                        echo "<h1>Top 10 [No mode Selected]</h1>";
+                    }
+                    ?>            
+                        <div class="toptenlist">
                         <li>Frequency 1</li>
                         <li>Frequency 2</li>
                         <li>Frequency 3</li>
@@ -45,6 +61,7 @@
                         <li>Frequency 9</li>
                         <li>Frequency 10</li>
                     </ul>
+                </div>
                         <div class="btn-container">
                             <a href="main.php"> <!-- working now -->
                             <button class="primary-btn" id="hmpg-btn">Back to Home Page</button>
