@@ -67,38 +67,13 @@
             </div>
             <div class="right">
                 <div>
-                   <original class= "original" id="original" name="original" rows="15" cols="50">Decrypted Text</original>
+                   <original class= "original" id="original" name="original" rows="15" cols="50"></original>
                 </div>
                 <div>
-                    <encrypted class="encrypted" id="encrypted" name="encrypted" rows="15" cols="50">Encrytped Text</encrypted>
+                    <encrypted class="encrypted" id="encrypted" name="encrypted" rows="15"> cols="50"></encrypted>
                 </div>
         </div>
     </div> 
     <script src="./scripts/app.js"></script>
-    <script>
-        // Define the mode and textToAnalyze variables using PHP within the script tag
-        var mode = <?php echo json_encode($mode); ?>;
-        var textToAnalyze = <?php echo json_encode($textToAnalyze); ?>;
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // Update mode display
-            document.getElementById('modeDisplay').textContent = mode.charAt(0).toUpperCase() + mode.slice(1);
-
-            // Use the mode and textToAnalyze to calculate frequencies
-            const frequencies = calculateFrequencies(mode, 'all', textToAnalyze);
-            const sortedFrequencies = sortFrequencies(frequencies);
-
-            // Select the list element
-            const listElement = document.getElementById('top10List');
-            listElement.innerHTML = ''; // Clear any existing content
-
-            // Create list items for the top 10 frequencies and append them to the list
-            Object.entries(sortedFrequencies).slice(0, 10).forEach(([key, value]) => {
-                const listItem = document.createElement('li');
-                listItem.textContent = `${key}: ${value}`;
-                listElement.appendChild(listItem);
-            });
-        });
-    </script>
 </body>
 </html>
