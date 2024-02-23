@@ -11,7 +11,7 @@
     <div class="banner"></div>   
     <div class="primary-container">
         <div class="secondary-container">
-            <div class="left column">
+            <div class="left">
                 <?php
                     
                     error_reporting(E_ALL);
@@ -32,34 +32,31 @@
                         
                     }
                     ?>
-                    <?php
-                    // Check if the 'mode' parameter is set in the GET request
-                    if (isset($_GET['mode'])) {
-                        // Retrieve the mode value from the GET parameters
-                        $mode = $_GET['mode'];
+                    <div class= "title">
+                        <?php
+                            if (isset($_POST["gen-report-btn"])) {
+                                echo "<div>";
+                                echo "<p> {$_POST["textarea"]} </p>";
+                                echo "</div>";
+                            } else {
+                                echo "Text input not provided.";
+                            }
+                        ?>        
+                        
                     
-                        // Check the mode value and print accordingly
-                        if ($mode === 'word') {
-                            echo "<h1>Top 10 [Word Mode]</h1>";
-                        } else {
-                            echo "<h1>Top 10 [Letter Mode]</h1>";
-                        }
-                    } else {
-                        // Handle the case when 'mode' parameter is not provided
-                        echo "<h1>Top 10 [No mode Selected]</h1>";
-                    }
-                    ?>            
-                        <div class="toptenlist">
-                        <li>Frequency 1</li>
-                        <li>Frequency 2</li>
-                        <li>Frequency 3</li>
-                        <li>Frequency 4</li>
-                        <li>Frequency 5</li>
-                        <li>Frequency 6</li>
-                        <li>Frequency 7</li>
-                        <li>Frequency 8</li>
-                        <li>Frequency 9</li>
-                        <li>Frequency 10</li>
+
+                    </div>      
+                        <div class="list">
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                        <li>6</li>
+                        <li>7</li>
+                        <li>8</li>
+                        <li>9</li>
+                        <li>10</li>
                     </ul>
                 </div>
                         <div class="btn-container">
@@ -68,14 +65,13 @@
                             </a>
                          </div>
             </div>
-            <div class="right column">
+            <div class="right">
                 <div>
-                   <original id="original" name="original" rows="15" cols="50"></original>
+                   <original class= "original" id="original" name="original" rows="15" cols="50"></original>
                 </div>
                 <div>
-                    <encrypted id="encrypted" name="encrypted" rows="15" cols="50"></encrypted>
+                    <encrypted class="encrypted" id="encrypted" name="encrypted" rows="15"> cols="50"></encrypted>
                 </div>
-            </div>
         </div>
     </div> 
     <script src="./scripts/app.js"></script>
