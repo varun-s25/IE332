@@ -67,10 +67,10 @@
             </div>
             <div class="right">
                 <div>
-                   <original class= "original" id="original" name="original" rows="15" cols="50"></original>
+                   <original class= "original" id="original" name="original" rows="15" cols="50">Decrytped Text</original>
                 </div>
                 <div>
-                    <encrypted class="encrypted" id="encrypted" name="encrypted" rows="15"> cols="50"></encrypted>
+                    <encrypted class="encrypted" id="encrypted" name="encrypted" rows="15" cols="50">Encrypted Text</encrypted>
                 </div>
         </div>
     </div> 
