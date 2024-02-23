@@ -43,6 +43,12 @@
             </div>
             <div class="right">
                 <!-- Right column content -->
+                <div>
+                   <original class= "original" id="original" name="original" rows="15" cols="50">Decrypted Text</original>
+                </div>
+                <div>
+                    <encrypted class="encrypted" id="encrypted" name="encrypted" rows="15" cols="50">Encrytped Text</encrypted>
+                </div>
             </div>
         </div>
     </div>
