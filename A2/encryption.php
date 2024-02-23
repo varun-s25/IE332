@@ -33,7 +33,7 @@ function decryptText($encryptedText, $key) {
 $key = "SecretKey"; 
 
 // Text to encrypt
-$plaintext = "Hello World";
+$plaintext = "Input Text to Main Page";
 
 // Encrypt text
 $encryptedText = encryptText($plaintext, $key);
