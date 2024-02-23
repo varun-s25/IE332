@@ -9,6 +9,7 @@ const letterRadio = document.getElementById('letter-radio');
 const wordRadio = document.getElementById('word-radio');
 const selectMenu = document.getElementById('select-menu');
 const textArea = document.getElementById('textarea');
+textArea.setAttribute('maxlength', '5000'); // Set the maximum length to 5000 characters
 const reportForm = document.getElementById('report-form');
 
 let mode = 'letter';

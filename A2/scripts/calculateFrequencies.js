@@ -12,21 +12,31 @@ export const calculateFrequencies = (mode, category, text) => {
 const calculateForWords = (text) => {
     const cleanedText = text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '');
 
-    // Split the text into words 
+    // Split the text into words
     const words = cleanedText.split(/\s+/);
 
-    // Create an object to store the word frequencies
-    const frequencies = {};
+    // Create an initial object to store the word frequencies
+    const initialFrequencies = {};
 
     // Iterate through the words and count their occurrences
     for (const word of words) {
+        if (!word) continue; // Skip empty strings that may result from the split
         // If the word exists in the frequencies object, increment its count
-        if (frequencies[word]) {
-            frequencies[word]++;
+        if (initialFrequencies[word]) {
+            initialFrequencies[word]++;
         } else {
             // Otherwise, initialize its count to 1
-            frequencies[word] = 1;
+            initialFrequencies[word] = 1;
         }
+    }
+
+    // Sort words by their frequency in decreasing order
+    const sortedPairs = Object.entries(initialFrequencies).sort((a, b) => b[1] - a[1]);
+
+    // Create a new frequencies object to maintain as much of the order as possible
+    const frequencies = {};
+    for (const [word, frequency] of sortedPairs) {
+        frequencies[word] = frequency;
     }
 
     return frequencies;
