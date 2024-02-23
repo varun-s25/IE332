@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,72 +7,70 @@
     <title>Summary Report Page</title>
 </head>
 <body>
-    <div class="banner"></div>   
+    <div class="banner"></div>
     <div class="primary-container">
         <div class="secondary-container">
             <div class="left">
                 <?php
-                    
                     error_reporting(E_ALL);
                     ini_set('display_errors', 1);
                     
+                    $mode = 'word'; // Default mode
+                    $textToAnalyze = ''; // Default text
                     
-                    // Check if the "mode" parameter is present in the query string
+                    // Check if the "mode" parameter is present in the POST data
                     if (isset($_POST['mode'])) {
-                        // Retrieve the value of the "mode" parameter
                         $mode = $_POST['mode'];
-
-                        // Now you can use $mode as needed
-                        echo "Mode: " . $mode;
                     } else {
-                        // Handle the case where "mode" parameter is not provided
-                        echo "Mode parameter not provided.";
-                        
-                        
+                        echo "Mode parameter not provided.<br>";
                     }
-                    ?>
-                    <div class= "title">
-                        <?php
-                            if (isset($_POST["gen-report-btn"])) {
-                                echo "<div>";
-                                echo "<p> {$_POST["textarea"]} </p>";
-                                echo "</div>";
-                            } else {
-                                echo "Text input not provided.";
-                            }
-                        ?>        
-                        
-                    
 
-                    </div>      
-                        <div class="list">
-                        <li>1</li>
-                        <li>2</li>
-                        <li>3</li>
-                        <li>4</li>
-                        <li>5</li>
-                        <li>6</li>
-                        <li>7</li>
-                        <li>8</li>
-                        <li>9</li>
-                        <li>10</li>
-                    </ul>
+                    if (isset($_POST["textarea"])) {
+                        $textToAnalyze = $_POST["textarea"]; // Get the text from POST data
+                    } else {
+                        echo "Text input not provided.<br>";
+                    }
+                ?>
+                <h1>Top 10 Frequencies in <span id="modeDisplay"><?php echo htmlspecialchars($mode); ?></span> Mode</h1>
+                <ul id="top10List">
+                    <!-- Frequencies will be populated here by JavaScript -->
+                </ul>
+                <div class="btn-container">
+                    <a href="main.php">
+                        <button class="primary-btn" id="hmpg-btn">Back to Home Page</button>
+                    </a>
                 </div>
-                        <div class="btn-container">
-                            <a href="main.php"> <!-- working now -->
-                            <button class="primary-btn" id="hmpg-btn">Back to Home Page</button>
-                            </a>
-                         </div>
             </div>
             <div class="right">
-                <div>
-                   <original class= "original" id="original" name="original" rows="15" cols="50"></original>
-                </div>
-                <div>
-                    <encrypted class="encrypted" id="encrypted" name="encrypted" rows="15"> cols="50"></encrypted>
-                </div>
+                <!-- Right column content -->
+            </div>
         </div>
-    </div> 
-    <script src="./scripts/app.js"></script>
+    </div>
+    <script src="./scripts/calculateFrequencies.js"></script>
+    <script>
+        // Define the mode and textToAnalyze variables using PHP within the script tag
+        var mode = <?php echo json_encode($mode); ?>;
+        var textToAnalyze = <?php echo json_encode($textToAnalyze); ?>;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update mode display
+            document.getElementById('modeDisplay').textContent = mode.charAt(0).toUpperCase() + mode.slice(1);
+
+            // Use the mode and textToAnalyze to calculate frequencies
+            const frequencies = calculateFrequencies(mode, 'all', textToAnalyze);
+            const sortedFrequencies = sortFrequencies(frequencies);
+
+            // Select the list element
+            const listElement = document.getElementById('top10List');
+            listElement.innerHTML = ''; // Clear any existing content
+
+            // Create list items for the top 10 frequencies and append them to the list
+            Object.entries(sortedFrequencies).slice(0, 10).forEach(([key, value]) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${key}: ${value}`;
+                listElement.appendChild(listItem);
+            });
+        });
+    </script>
 </body>
 </html>
