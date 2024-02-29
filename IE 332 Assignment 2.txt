@@ -1,6 +1,0 @@
-<<<<<<< HEAD
-IE 332 Assignment 2
-=======
-IE 332 Assignment 2
-iiihhh
->>>>>>> 0da299e2999bd66628b190657fcd1f79ac7a98ae
