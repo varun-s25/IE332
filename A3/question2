@@ -1,0 +1,105 @@
+CREATE TABLE Employee (
+    Employee_ID INT PRIMARY KEY,
+    Employment_Start_Date DATE NOT NULL,
+    Employment_End_Date DATE,
+    Employee_Type VARCHAR(30) NOT NULL,
+    First_Name VARCHAR(30) NOT NULL,
+    Last_Name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Manager (
+    Employee_ID INT PRIMARY KEY
+    FOREIGN KEY (Employee_ID) REFERENCES Employee(Employee_ID)
+);
+
+CREATE TABLE Staff (
+    Employee_ID INT PRIMARY KEY,
+    Employment_Type VARCHAR(30) NOT NULL,
+    FOREIGN KEY (Employee_ID) REFERENCES Employee(Employee_ID)
+);
+
+CREATE TABLE Sales_Group (
+    Sales_Group_ID INT PRIMARY KEY,
+    Manager_ID INT NOT NULL,
+    FOREIGN KEY (Manager_ID) REFERENCES Manager(Employee_ID)
+);
+
+CREATE TABLE Salesperson (
+    Employee_ID INT PRIMARY KEY,
+    Sales_Group_ID INT NOT NULL,
+    Commission_Rate Decimal(5,2) NOT NULL,
+    Dealership_ID INT NOT NULL,
+    FOREIGN KEY (Dealership_ID) REFERENCES Dealership(Dealership_ID),
+    FOREIGN KEY (Employee_ID) REFERENCES Staff(Employee_ID),
+    FOREIGN KEY (Sales_Group_ID) REFERENCES Sales_Group(Sales_Group_ID)
+);
+
+CREATE TABLE Mechanic (
+    Employee_ID INT PRIMARY KEY,
+    Certification_Date DATE NOT NULL,
+    Certificiation_State VARCHAR(30) NOT NULL, 
+    Repair_Shop_ID INT NOT NULL,
+    FOREIGN KEY (Employee_ID) REFERENCES Staff(Employee_ID)
+    FOREIGN KEY (Repair_Shop_ID) REFERENCES Repair_Shop(Repair_Shop_ID)
+);
+
+CREATE TABLE Repair_Shop (
+    Repair_Shop_ID INT PRIMARY KEY,
+    Dealership_ID INT NOT NULL
+);
+
+
+CREATE TABLE Vehicle (
+    VIN VARCHAR(17) PRIMARY KEY,
+    Sale_Date DATE NOT NULL,
+    Sale_Price Decimal(10,2) NOT NULL,
+    Employee_ID INT NOT NULL,
+    Owner_ID INT NOT NULL,
+    Vehicle_Type VARCHAR(30) NOT NULL,
+    Make VARCHAR(30) NOT NULL,
+    Model VARCHAR(30) NOT NULL,
+    Year INT NOT NULL,
+    FOREIGN KEY (Employee_ID) REFERENCES Salesperson(Employee_ID),
+    FOREIGN KEY (Owner_ID) REFERENCES Owner(Owner_ID)
+);
+
+CREATE TABLE Car (
+    VIN VARCHAR(17) PRIMARY KEY,
+    FOREIGN KEY (VIN) REFERENCES Vehicle(VIN)
+);
+
+CREATE TABLE Pickup_Truck (
+    VIN VARCHAR(17) PRIMARY KEY,
+    FOREIGN KEY (VIN) REFERENCES Vehicle(VIN)
+);
+
+CREATE TABLE BUS (
+    VIN VARCHAR(17) PRIMARY KEY,
+    Seating_Capacity INT NOT NULL,
+    Safety_Certified BOOLEAN NOT NULL,
+    FOREIGN KEY (VIN) REFERENCES Vehicle(VIN)
+);
+
+CREATE TABLE Van (
+    VIN VARCHAR(17) PRIMARY KEY,
+    Wheelchair_Accessible BOOLEAN NOT NULL,
+    FOREIGN KEY (VIN) REFERENCES Vehicle(VIN)
+);
+
+CREATE TABLE Service (
+    Service_ID INT PRIMARY KEY,
+    Service_Type VARCHAR(30) NOT NULL, 
+    Time_to_Complete INT NOT NULL,
+    Cost Decimal(10,2) NOT NULL
+    Repair_Shop_ID INT NOT NULL,
+    FOREIGN KEY (Repair_Shop_ID) REFERENCES Repair_Shop(Repair_Shop_ID)
+);
+
+CREATE TABLE Owner (
+    Owner_ID INT PRIMARY KEY,
+    First_Name VARCHAR(30) NOT NULL,
+    Last_Name VARCHAR(50) NOT NULL,
+    Address VARCHAR(100) NOT NULL,
+    Phone_Number VARCHAR(15) NOT NULL
+);
+
