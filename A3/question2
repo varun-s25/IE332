@@ -2,8 +2,8 @@ CREATE TABLE Employee (
     Employee_ID INT PRIMARY KEY,
     Employment_Start_Date DATE NOT NULL,
     Employment_End_Date DATE,
-    Employee_Type VARCHAR(30) NOT NULL,
-    First_Name VARCHAR(30) NOT NULL,
+    Employee_Type VARCHAR(20) NOT NULL,
+    First_Name VARCHAR(50) NOT NULL,
     Last_Name VARCHAR(50) NOT NULL
 );
 
@@ -37,7 +37,7 @@ CREATE TABLE Salesperson (
 CREATE TABLE Mechanic (
     Employee_ID INT PRIMARY KEY,
     Certification_Date DATE NOT NULL,
-    Certificiation_State VARCHAR(30) NOT NULL, 
+    Certificiation_State VARCHAR(20) NOT NULL, 
     Repair_Shop_ID INT NOT NULL,
     FOREIGN KEY (Employee_ID) REFERENCES Staff(Employee_ID)
     FOREIGN KEY (Repair_Shop_ID) REFERENCES Repair_Shop(Repair_Shop_ID)
@@ -59,6 +59,7 @@ CREATE TABLE Vehicle (
     Make VARCHAR(30) NOT NULL,
     Model VARCHAR(30) NOT NULL,
     Year INT NOT NULL,
+    Optional_Packages VARCHAR(255),
     FOREIGN KEY (Employee_ID) REFERENCES Salesperson(Employee_ID),
     FOREIGN KEY (Owner_ID) REFERENCES Owner(Owner_ID)
 );
@@ -73,7 +74,7 @@ CREATE TABLE Pickup_Truck (
     FOREIGN KEY (VIN) REFERENCES Vehicle(VIN)
 );
 
-CREATE TABLE BUS (
+CREATE TABLE Bus (
     VIN VARCHAR(17) PRIMARY KEY,
     Seating_Capacity INT NOT NULL,
     Safety_Certified BOOLEAN NOT NULL,
@@ -88,11 +89,17 @@ CREATE TABLE Van (
 
 CREATE TABLE Service (
     Service_ID INT PRIMARY KEY,
+    Employee_ID INT NOT NULL,
+    Owner_ID INT NOT NULL,
+    Dealership_ID INT NOT NULL,
+    VIN VARCHAR(17) NOT NULL,
     Service_Type VARCHAR(30) NOT NULL, 
-    Time_to_Complete INT NOT NULL,
-    Cost Decimal(10,2) NOT NULL
-    Repair_Shop_ID INT NOT NULL,
-    FOREIGN KEY (Repair_Shop_ID) REFERENCES Repair_Shop(Repair_Shop_ID)
+    Service_Time INT NOT NULL,
+    Service_Cost Decimal(10,2) NOT NULL
+    FOREIGN KEY (Employee_ID) REFERENCES Mechanic(Employee_ID),
+    FOREIGN KEY (Owner_ID) REFERENCES Owner(Owner_ID),
+    FOREIGN KEY (Dealership_ID) REFERENCES Dealership(Dealership_ID),
+    FOREIGN KEY (VIN) REFERENCES Vehicle(VIN)
 );
 
 CREATE TABLE Owner (
@@ -103,3 +110,14 @@ CREATE TABLE Owner (
     Phone_Number VARCHAR(15) NOT NULL
 );
 
+CREATE TABLE Sales (
+    VIN VARCHAR(17),
+    Employee_ID INT,
+    Owner_ID INT,
+    Sale_Date DATE NOT NULL,
+    Sale_Price Decimal(10,2) NOT NULL,
+    PRIMARY KEY (VIN, Employee_ID, Owner_ID),
+    FOREIGN KEY (VIN) REFERENCES Vehicle(VIN),
+    FOREIGN KEY (Employee_ID) REFERENCES Salesperson(Employee_ID), 
+    FOREIGN KEY (Owner_ID) REFERENCES Owner(Owner_ID)
+)
