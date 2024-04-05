@@ -120,4 +120,4 @@ CREATE TABLE Sales (
     FOREIGN KEY (VIN) REFERENCES Vehicle(VIN),
     FOREIGN KEY (Employee_ID) REFERENCES Salesperson(Employee_ID), 
     FOREIGN KEY (Owner_ID) REFERENCES Owner(Owner_ID)
-)
+);
