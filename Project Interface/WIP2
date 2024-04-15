@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .primary-container {
+            display: flex;
+            flex-grow: 1;
+        }
+        .banner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            width: 97%;
+        }
+        .tabs-container {
+            display: flex;
+            flex-direction: column;
+            width: 15%;
+            background-color: #ddd;
+            padding: 10px;
+        }
+        .tabs {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .tab {
+            cursor: pointer;
+            padding: 10px;
+            background-color: #ddd;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+        .tab.active {
+            background-color: #bbb;
+        }
+        .content-container {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            padding: 0 20px;
+            overflow-y: auto;
+        }
+        .division {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            color: #fff;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .contact-information {
+            background-color: #ff4d4d;
+            height: 120px;
+        }
+        .previous-sales {
+            background-color: #4d94ff;
+            height: 180px;
+        }
+        .marketing-graph {
+            background-color: #4d804d;
+            height: 100px;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #333;
+            min-width: 160px;
+            z-index: 1;
+        }
+        .dropdown-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="banner">
+        <div>
+            <select id="ribbon" onchange="location = this.value;">
+                <option value="?ribbon=ERP">Enterprise Resource Planning (ERP)</option>
+                <option value="?ribbon=CRM">Customer Relationship Management (CRM)</option>
+                <option value="?ribbon=SCM">Supply Chain Management (SCM)</option>
+            </select>
+        </div>
+        <div id="datetime"></div>
+    </div>
+    <div class="primary-container">
+        <div class="tabs-container">
+            <ul class="tabs">
+            	<li class="tab erp-tab active" data-target="erp-accounting-financial-management">Accounting/Financial Management</li>
+                <li class="tab erp-tab" data-target="erp-human-resources">Human Resources</li>
+                <li class="tab erp-tab" data-target="erp-store-management">Store Management</li>
+                <li class="tab erp-tab" data-target="erp-business-intelligence">Business Intelligence</li>
+                <li class="tab crm-tab" data-target="crm-sales">Sales</li>
+                <li class="tab crm-tab" data-target="crm-membership-management">Membership Management</li>
+                <li class="tab crm-tab" data-target="crm-customer-service">Customer Service</li>
+                <li class="tab crm-tab" data-target="crm-marketing">Marketing</li>
+                <li class="tab crm-tab" data-target="crm-communication-channels">Communication Channels</li>
+                <li class="tab scm-tab" data-target="scm-inventory-management">Inventory Management</li>
+                <li class="tab scm-tab" data-target="scm-order-management">Order Management</li>
+                <li class="tab scm-tab" data-target="scm-warehouse-management">Warehouse Management</li>
+                <li class="tab scm-tab" data-target="scm-transportation-management">Transportation Management</li>
+                <li class="tab scm-tab" data-target="scm-supplier-management">Supplier Management</li>
+                <li class="tab scm-tab" data-target="scm-procurement">Procurement</li>
+            </ul>
+        </div>
+        <div class="content-container">
+            <div class="division erp-accounting-financial-management" style="display: block; color:black">
+            	Cash <br>(Graph/Table Placeholder)
+                Accounting/Financial Management<br>(Graph/Table Placeholder)
+            </div>
+            <div class="division erp-human-resources" style="color:black">
+            	Human Resources<br>(Graph/Table Placeholderrrr)
+            </div>
+            <div class="division erp-store-management" style="color:black">
+            	Store Management<br>(Graph/Table Placeholder)
+            </div>
+            <div class="division erp-business-intelligence" style="color:black">
+            	Business Intelligence<br>(Graph/Table Placeholder)
+            </div>
+            <div class="division crm-sales" style="color:black">
+            	Sales<br>(Graph/Table Placeholder)
+            </div>
+            <div class="division crm-membership-management" style="color:black">
+            	Membership Management<br>(Graph/Table Placeholder)
+            </div>
+            <div class="division crm-customer-service" style="color:black">
+            	Customer Service<br>(Graph/Table Placeholder)
+            </div>
+            <div class="division crm-marketing" style="color:black">
+            	Marketing<br>(Graph/Table Placeholder)
+            </div>
+            <div class="division crm-communication-channels" style="color:black">
+            	Communication Channels<br>(Graph/Table Placeholder)
+            </div>
+            <div class="division scm-inventory-management" style="color:black">
+            	Inventory Management<br>(Graph/Table Placeholder)
+            </div>
+            <div class="division scm-order-management" style="color:black">
+            	Order Management<br>(Graph/Table Placeholder)
+            </div>
+            <div class="division scm-warehouse-management" style="color:black">
+            	Warehouse Management<br>(Graph/Table Placeholder)
+            </div>
+            <div class="division scm-transportation-management" style="color:black">
+            	Transportation Management<br>(Graph/Table Placeholder)
+            </div>
+            <div class="division scm-supplier-management" style="color:black">
+            	Supplier Management<br>(Graph/Table Placeholder)
+            </div>
+            <div class="division scm-procurement" style="color:black">
+            	Procurement<br>(Graph/Table Placeholder)
+            </div>
+        </div>
+    </div>
+
+    <script>
+    	document.addEventListener('DOMContentLoaded', function () {
+    const tabs = document.querySelectorAll('.tab');
+    const divisions = document.querySelectorAll('.division');
+
+    // Function to show/hide tabs based on selected ribbon
+    function updateTabs(ribbon) {
+        // Hide all tabs
+        tabs.forEach(tab => tab.style.display = 'none');
+        divisions.forEach(division => division.style.display = 'none');
+
+        // Show tabs based on selected ribbon
+        switch (ribbon) {
+            case 'ERP':
+                document.querySelectorAll('.erp-tab').forEach(tab => tab.style.display = 'block');
+                break;
+            case 'CRM':
+                document.querySelectorAll('.crm-tab').forEach(tab => tab.style.display = 'block');
+                break;
+            case 'SCM':
+                document.querySelectorAll('.scm-tab').forEach(tab => tab.style.display = 'block');
+                break;
+            default:
+                break;
+        }
+    }
+
+    // Initial update based on default ribbon value
+    const defaultRibbon = 'ERP';
+    updateTabs(defaultRibbon);
+
+    // Event listener for ribbon dropdown change
+    const ribbonDropdown = document.getElementById('ribbon');
+    ribbonDropdown.addEventListener('change', function () {
+        const selectedRibbon = this.value.replace('?ribbon=', '');
+        updateTabs(selectedRibbon);
+    });
+
+    function updateTime() {
+        const now = new Date();
+        const datetimeElement = document.getElementById('datetime');
+        datetimeElement.innerText = now.toLocaleString();
+    }
+
+    updateTime();
+    setInterval(updateTime, 1000);
+});
+
+       
+    </script>
+</body>
+</html>
