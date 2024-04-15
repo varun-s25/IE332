@@ -106,6 +106,9 @@
         .dropdown:hover .dropdown-content {
             display: block;
         }
+        .tab.selected {
+    		background-color: #ccc;
+		}
     </style>
 </head>
 <body>
@@ -122,7 +125,7 @@
     <div class="primary-container">
         <div class="tabs-container">
             <ul class="tabs">
-            	<li class="tab erp-tab active" data-target="erp-accounting-financial-management">Accounting/Financial Management</li>
+            	<li class="tab erp-tab" data-target="erp-accounting-financial-management">Accounting/Financial Management</li>
                 <li class="tab erp-tab" data-target="erp-human-resources">Human Resources</li>
                 <li class="tab erp-tab" data-target="erp-store-management">Store Management</li>
                 <li class="tab erp-tab" data-target="erp-business-intelligence">Business Intelligence</li>
@@ -190,51 +193,74 @@
     </div>
 
     <script>
-    	document.addEventListener('DOMContentLoaded', function () {
+		document.addEventListener('DOMContentLoaded', function () {
     		const tabs = document.querySelectorAll('.tab');
     		const divisions = document.querySelectorAll('.division');
 
-    	function updateTabs(ribbon) {
-        // Hide all tabs
-        	tabs.forEach(tab => tab.style.display = 'none');
-        	divisions.forEach(division => division.style.display = 'none');
+    		function updateTabs(ribbon) {
+        		// Hide all tabs
+        		tabs.forEach(tab => tab.style.display = 'none');
+        		divisions.forEach(division => division.style.display = 'none');
 
-        // Show tabs based on selected ribbon
-        switch (ribbon) {
-            case 'ERP':
-                document.querySelectorAll('.erp-tab').forEach(tab => tab.style.display = 'block');
-                break;
-            case 'CRM':
-                document.querySelectorAll('.crm-tab').forEach(tab => tab.style.display = 'block');
-                break;
-            case 'SCM':
-                document.querySelectorAll('.scm-tab').forEach(tab => tab.style.display = 'block');
-                break;
-            default:
-                break;
-        }
-    }
+        		// Show tabs based on selected ribbon
+        		switch (ribbon) {
+            		case 'ERP':
+                		document.querySelectorAll('.erp-tab').forEach(tab => tab.style.display = 'block');
+                		break;
+            		case 'CRM':
+            	    	document.querySelectorAll('.crm-tab').forEach(tab => tab.style.display = 'block');
+           	     		break;
+            		case 'SCM':
+                		document.querySelectorAll('.scm-tab').forEach(tab => tab.style.display = 'block');
+                		break;
+            		default:
+                		break;
+        		}
+    		}
 
-    	// Initial update based on default ribbon value
-    	const defaultRibbon = 'ERP';
-    	updateTabs(defaultRibbon);
+    		// Initial update based on default ribbon value
+    		const defaultRibbon = 'ERP';
+    		updateTabs(defaultRibbon);
 
-    	const ribbonDropdown = document.getElementById('ribbon');
-    	ribbonDropdown.addEventListener('change', function () {
-        	const selectedRibbon = this.value;
-        	updateTabs(selectedRibbon);
-    	});
+    		// Function to handle tab clicks
+    		function handleTabClick(target) {
+        		// Hide all divisions
+        		divisions.forEach(division => division.style.display = 'none');
 
-    	function updateTime() {
-        	const now = new Date();
-        	const datetimeElement = document.getElementById('datetime');
-        	datetimeElement.innerText = now.toLocaleString();
-    	}
+        		// Remove 'selected' class from all tabs
+        		tabs.forEach(tab => tab.classList.remove('selected'));
 
-    	updateTime();
-    	setInterval(updateTime, 1000);
-	});
+        		// Show the division corresponding to the clicked tab
+        		document.querySelector('.' + target).style.display = 'block';
 
+        		// Add 'selected' class to the clicked tab
+        		document.querySelector('[data-target="' + target + '"]').classList.add('selected');
+    		}
+
+    		// Add event listeners to tabs
+    		tabs.forEach(tab => {
+        		tab.addEventListener('click', function () {
+            		const target = this.getAttribute('data-target');
+            		handleTabClick(target);
+        		});
+    		});
+
+    		const ribbonDropdown = document.getElementById('ribbon');
+    		ribbonDropdown.addEventListener('change', function () {
+       		 	const selectedRibbon = this.value;
+        		updateTabs(selectedRibbon);
+      		});
+
+    		function updateTime() {
+        		const now = new Date();
+        		const datetimeElement = document.getElementById('datetime');
+        		datetimeElement.innerText = now.toLocaleString();
+    		}
+
+    		updateTime();
+    		setInterval(updateTime, 1000);
+		});
+        
     </script>
 </body>
 </html>
