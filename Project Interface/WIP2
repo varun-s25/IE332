@@ -111,11 +111,11 @@
 <body>
     <div class="banner">
         <div>
-            <select id="ribbon" onchange="location = this.value;">
-                <option value="?ribbon=ERP">Enterprise Resource Planning (ERP)</option>
-                <option value="?ribbon=CRM">Customer Relationship Management (CRM)</option>
-                <option value="?ribbon=SCM">Supply Chain Management (SCM)</option>
-            </select>
+            <select id="ribbon">
+    			<option value="ERP">Enterprise Resource Planning (ERP)</option>
+    			<option value="CRM">Customer Relationship Management (CRM)</option>
+    			<option value="SCM">Supply Chain Management (SCM)</option>
+			</select>
         </div>
         <div id="datetime"></div>
     </div>
@@ -191,14 +191,13 @@
 
     <script>
     	document.addEventListener('DOMContentLoaded', function () {
-    const tabs = document.querySelectorAll('.tab');
-    const divisions = document.querySelectorAll('.division');
+    		const tabs = document.querySelectorAll('.tab');
+    		const divisions = document.querySelectorAll('.division');
 
-    // Function to show/hide tabs based on selected ribbon
-    function updateTabs(ribbon) {
+    	function updateTabs(ribbon) {
         // Hide all tabs
-        tabs.forEach(tab => tab.style.display = 'none');
-        divisions.forEach(division => division.style.display = 'none');
+        	tabs.forEach(tab => tab.style.display = 'none');
+        	divisions.forEach(division => division.style.display = 'none');
 
         // Show tabs based on selected ribbon
         switch (ribbon) {
@@ -216,28 +215,26 @@
         }
     }
 
-    // Initial update based on default ribbon value
-    const defaultRibbon = 'ERP';
-    updateTabs(defaultRibbon);
+    	// Initial update based on default ribbon value
+    	const defaultRibbon = 'ERP';
+    	updateTabs(defaultRibbon);
 
-    // Event listener for ribbon dropdown change
-    const ribbonDropdown = document.getElementById('ribbon');
-    ribbonDropdown.addEventListener('change', function () {
-        const selectedRibbon = this.value.replace('?ribbon=', '');
-        updateTabs(selectedRibbon);
-    });
+    	const ribbonDropdown = document.getElementById('ribbon');
+    	ribbonDropdown.addEventListener('change', function () {
+        	const selectedRibbon = this.value;
+        	updateTabs(selectedRibbon);
+    	});
 
-    function updateTime() {
-        const now = new Date();
-        const datetimeElement = document.getElementById('datetime');
-        datetimeElement.innerText = now.toLocaleString();
-    }
+    	function updateTime() {
+        	const now = new Date();
+        	const datetimeElement = document.getElementById('datetime');
+        	datetimeElement.innerText = now.toLocaleString();
+    	}
 
-    updateTime();
-    setInterval(updateTime, 1000);
-});
+    	updateTime();
+    	setInterval(updateTime, 1000);
+	});
 
-       
     </script>
 </body>
 </html>
