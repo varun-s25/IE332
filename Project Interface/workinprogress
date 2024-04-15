@@ -122,7 +122,7 @@
     <div class="primary-container">
         <div class="tabs-container">
             <ul class="tabs">
-                <li class="tab active" data-target="accounting-financial-management">Accounting/Financial Management</li>
+            	<li class="tab active" data-target="accounting-financial-management">Accounting/Financial Management</li>
                 <li class="tab" data-target="human-resources">Human Resources</li>
                 <li class="tab" data-target="store-management">Store Management</li>
                 <li class="tab" data-target="business-intelligence">Business Intelligence</li>
@@ -140,9 +140,21 @@
             </ul>
         </div>
         <div class="content-container">
-            <div class="division contact-information" style="display: block;">Contact Information<br>(Graph/Table Placeholder)</div>
-            <div class="division previous-sales">Previous Sales<br>(Graph/Table Placeholder)</div>
-            <div class="division marketing-graph">Marketing Graph<br>(Graph/Table Placeholder)</div>
+            <div class="division accounting-financial-management" style="display: block;">Accounting/Financial Management<br>(Graph/Table Placeholder)</div>
+            <div class="division human-resources">Human Resources<br>(Graph/Table Placeholder)</div>
+            <div class="division store-management">Store Management<br>(Graph/Table Placeholder)</div>
+            <div class="division business-intelligence">Business Intelligence<br>(Graph/Table Placeholder)</div>
+            <div class="division sales">Sales<br>(Graph/Table Placeholder)</div>
+            <div class="division membership-management">Membership Management<br>(Graph/Table Placeholder)</div>
+            <div class="division customer-service">Customer Service<br>(Graph/Table Placeholder)</div>
+            <div class="division marketing">Marketing<br>(Graph/Table Placeholder)</div>
+            <div class="division communication-channels">Communication Channels<br>(Graph/Table Placeholder)</div>
+            <div class="division inventory-management">Inventory Management<br>(Graph/Table Placeholder)</div>
+            <div class="division order-management">Order Management<br>(Graph/Table Placeholder)</div>
+            <div class="division warehouse-management">Warehouse Management<br>(Graph/Table Placeholder)</div>
+            <div class="division transportation-management">Transportation Management<br>(Graph/Table Placeholder)</div>
+            <div class="division supplier-management">Supplier Management<br>(Graph/Table Placeholder)</div>
+            <div class="division procurement">Procurement<br>(Graph/Table Placeholder)</div>
         </div>
     </div>
 
