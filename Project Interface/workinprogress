@@ -45,6 +45,7 @@
     		border-radius: 5px;
     		margin: 5px;
     		transition: background-color 0.3s ease;
+            text-align: center; /* Center-align text */
 		}
 		.tab:hover {
     		background-color: #7f8a94; /* darker color on hover */
