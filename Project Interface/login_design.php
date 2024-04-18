@@ -61,6 +61,10 @@
         .input-group button:hover {
             background-color: #444;
         }
+        /* Additional style for the "Add Data" button */
+        .add-data-button {
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -80,6 +84,7 @@
             </div>
             <div class="input-group">
                 <button type="submit">Login</button>
+                <button type="button" class="add-data-button">Add Data</button>
             </div>
         </form>
     </div>
