@@ -83,7 +83,7 @@
 </head>
 <body>
     <div class="banner">
-        <h1>Project Interface</h1>
+        <h1>Head Office</h1>
         <div class="dropdown">
             <select id="ribbon">
                 <option value="ERP">Enterprise Resource Planning (ERP)</option>
@@ -102,14 +102,11 @@
             <div class="tab crm-tab" data-target="crm-sales">Sales</div>
             <div class="tab crm-tab" data-target="crm-membership-management">Membership Management</div>
             <div class="tab crm-tab" data-target="crm-customer-service">Customer Service</div>
-            <div class="tab crm-tab" data-target="crm-marketing">Marketing</div>
-            <div class="tab crm-tab" data-target="crm-communication-channels">Communication Channels</div>
+            <div class="tab crm-tab" data-target="crm-marketing-communication-channels">Marketing/Communication Channels</div>
             <div class="tab scm-tab" data-target="scm-inventory-management">Inventory Management</div>
             <div class="tab scm-tab" data-target="scm-order-management">Order Management</div>
             <div class="tab scm-tab" data-target="scm-warehouse-management">Warehouse Management</div>
             <div class="tab scm-tab" data-target="scm-transportation-management">Transportation Management</div>
-            <div class="tab scm-tab" data-target="scm-supplier-management">Supplier Management</div>
-            <div class="tab scm-tab" data-target="scm-procurement">Procurement</div>
         </div>
     </div>
     <div class="content-container">
@@ -135,11 +132,8 @@
         <div class="division crm-customer-service" style="color:black">
             Customer Service<br>(Graph/Table Placeholder)
         </div>
-        <div class="division crm-marketing" style="color:black">
+        <div class="division crm-marketing-communication-channels" style="color:black">
             Marketing<br>(Graph/Table Placeholder)
-        </div>
-        <div class="division crm-communication-channels" style="color:black">
-            Communication Channels<br>(Graph/Table Placeholder)
         </div>
         <div class="division scm-inventory-management" style="color:black">
             Inventory Management<br>(Graph/Table Placeholder)
@@ -152,12 +146,6 @@
         </div>
         <div class="division scm-transportation-management" style="color:black">
             Transportation Management<br>(Graph/Table Placeholder)
-        </div>
-        <div class="division scm-supplier-management" style="color:black">
-            Supplier Management<br>(Graph/Table Placeholder)
-        </div>
-        <div class="division scm-procurement" style="color:black">
-            Procurement<br>(Graph/Table Placeholder)
         </div>
     </div>
 
