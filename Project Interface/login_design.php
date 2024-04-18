@@ -91,10 +91,15 @@
                 event.preventDefault();
                 const username = document.getElementById('username').value;
                 const password = document.getElementById('password').value;
-                // Perform login authentication here
-                console.log('Username:', username);
-                console.log('Password:', password);
-                // You can replace the console.log with actual authentication logic
+
+                // Perform login authentication
+                if (username === 'adminLogin' && password === 'adminPassword') {
+                    // Redirect to projectInterface.php
+                    window.location.href = 'webpage_design.php';
+                } else {
+                    // Show error message or handle invalid login
+                    alert('Invalid username or password');
+                }
             });
 
             function updateTime() {
@@ -109,4 +114,3 @@
     </script>
 </body>
 </html>
-
