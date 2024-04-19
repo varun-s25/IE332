@@ -73,7 +73,7 @@
         <div id="datetime"></div>
     </div>
     <div class="login-form">
-        <form id="loginForm">
+        <form id="loginForm" method="post">
             <div class="input-group">
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" required>
@@ -90,32 +90,54 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const loginForm = document.getElementById('loginForm');
-            loginForm.addEventListener('submit', function (event) {
-                event.preventDefault();
-                const username = document.getElementById('username').value;
-                const password = document.getElementById('password').value;
+        function updateTime() {
+            const now = new Date();
+            const datetimeElement = document.getElementById('datetime');
+            datetimeElement.innerText = now.toLocaleString();
+        }
 
-                // Perform login authentication
-                if (username === 'adminLogin' && password === 'adminPassword') {
-                    // Redirect to projectInterface.php
-                    window.location.href = 'webpage_design.php';
-                } else {
-                    // Show error message or handle invalid login
-                    alert('Invalid username or password');
-                }
-            });
-
-            function updateTime() {
-                const now = new Date();
-                const datetimeElement = document.getElementById('datetime');
-                datetimeElement.innerText = now.toLocaleString();
-            }
-
-            updateTime();
-            setInterval(updateTime, 1000);
-        });
+        updateTime();
+        setInterval(updateTime, 1000);
     </script>
 </body>
 </html>
+
+<?php
+session_start();
+// Database connection
+$servername = "mydb.ics.purdue.edu"; // Change this to your server name
+$usernameDB = "g1130865"; // Change this to your database username
+$passwordDB = "GroupNine"; // Change this to your database password
+$dbname = "g1130865"; // Change this to your database name
+$tableName = "users"; // CDatahange this to your table name
+
+// Create connection
+$conn = new mysqli($servername, $usernameDB, $passwordDB, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Check if form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $usernameInput = $_POST['username'];
+    $passwordInput = $_POST['password'];
+
+    // Query to check if username and password exist in the database
+    $sql = "SELECT * FROM $tableName WHERE Username = '$usernameInput' AND Userpass = '$passwordInput'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        // Redirect to the next page if user is authenticated
+        header("Location: webpage_design.php");
+        exit();
+    } else {
+        // Show error message or handle invalid login
+        echo '<script>alert("Invalid username or password");</script>';
+    }
+}
+
+// Close connection
+$conn->close();
+?>
