@@ -125,12 +125,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $passwordInput = $_POST['password'];
 
     // Query to check if username and password exist in the database
-    $sql = "SELECT * FROM $tableName WHERE Username = '$usernameInput' AND Userpass = '$passwordInput'";
+    $sql = "SELECT * FROM $tableName WHERE UserName = '$usernameInput' AND UserPass = '$passwordInput'";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
         // Redirect to the next page if user is authenticated
-        header("Location: webpage_design.php");
+        header("Location: individual_store.php");
         exit();
     } else {
         // Show error message or handle invalid login
