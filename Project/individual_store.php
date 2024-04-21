@@ -269,6 +269,45 @@
                 window.location.href = 'login_design';
             });
         });
+
+        // Function to redirect user to login page
+        function redirectToLoginPage() {
+            window.location.href = 'login_design'; // Change this to your login page URL
+        }
+
+        // Function to track user activity
+        function trackUserActivity() {
+            let inactiveTime = 0;
+            const maxInactiveTime = 300000; // 5 minutes in milliseconds
+
+            function resetInactiveTime() {
+                inactiveTime = 0;
+            }
+
+            function incrementInactiveTime() {
+                inactiveTime += 1000; // Increment by 1 second
+                if (inactiveTime >= maxInactiveTime) {
+                    redirectToLoginPage(); // Redirect to login page after max inactive time
+                }
+            }
+
+            function handleUserActivity() {
+                resetInactiveTime();
+            }
+
+            // Event listeners for user activity
+            document.addEventListener('mousemove', handleUserActivity);
+            document.addEventListener('keypress', handleUserActivity);
+
+            // Track inactive time
+            setInterval(incrementInactiveTime, 1000); // Update every second
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Call the function to track user activity
+            trackUserActivity();
+        });
+
     </script>
 </body>
 </html>
