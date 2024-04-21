@@ -61,7 +61,7 @@
         .input-group button:hover {
             background-color: #444;
         }
-        /* Additional style for the "Add Data" button */
+    
         .add-data-button {
             margin-left: 10px;
         }
@@ -90,24 +90,27 @@
     </div>
 
     <script>
+
+// time update function
 function updateTime() {
-    const now = new Date();
-    const datetimeElement = document.getElementById('datetime');
-    datetimeElement.innerText = now.toLocaleString();
+    const now = new Date(); // gets the current date and time
+    const datetimeElement = document.getElementById('datetime'); // gets the element with the ID "datetime"
+    datetimeElement.innerText = now.toLocaleString(); // sets the text content of the element to the current date and time
 }
 
+// function for generating data
 function addData() {
     var startDate = prompt("Enter start date (YYYY-MM-DD):");
     var endDate = prompt("Enter end date (YYYY-MM-DD):");
 
-    // Check if both start and end date are provided
+    // checks for valid data entry
     if (startDate && endDate) {
-        // Redirect to PHP script to generate and insert synthetic data
+        // redirects to PHP script to generate and insert synthetic data
         window.location.href = "generate_data.php?start_date=" + startDate + "&end_date=" + endDate;
     } else {
-        // Display notification
+        // displays notification about invalid date entry
         alert("Data not added. Start/End date not entered.");
-        // Refresh the login page
+        // refreshes login page after date is not added correctly
         window.location.href = "login_design.php";
     }
 }
@@ -115,23 +118,21 @@ function addData() {
 updateTime();
 setInterval(updateTime, 1000);
 
-// Add event listener to the "Add Data" button
+// event listener for "Add Data" button
 document.querySelector('.add-data-button').addEventListener('click', function(event) {
-    event.preventDefault(); // Prevent default form submission
-    addData(); // Call addData function to prompt for dates
+    event.preventDefault(); // prevents default form submission
+    addData(); // calls the addData function to prompt for dates
 });
 </script>
 
-
-    <!-- PHP code for handling login -->
     <?php
     session_start();
-    // Database connection
-    $servername = "mydb.ics.purdue.edu"; // Change this to your server name
-    $usernameDB = "g1130865"; // Change this to your database username
-    $passwordDB = "GroupNine"; // Change this to your database password
-    $dbname = "g1130865"; // Change this to your database name
-    $tableName = "users"; // Change this to your table name
+    // connecting to mysql database
+    $servername = "mydb.ics.purdue.edu";
+    $usernameDB = "g1130865"; 
+    $passwordDB = "GroupNine";
+    $dbname = "g1130865"; 
+    $tableName = "users"; 
 
     // Create connection
     $conn = new mysqli($servername, $usernameDB, $passwordDB, $dbname);
