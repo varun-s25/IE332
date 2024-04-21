@@ -134,44 +134,44 @@ document.querySelector('.add-data-button').addEventListener('click', function(ev
     $dbname = "g1130865"; 
     $tableName = "users"; 
 
-    // Create connection
     $conn = new mysqli($servername, $usernameDB, $passwordDB, $dbname);
 
-    // Check connection
+    // checks connection
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    // Check if form is submitted
+    // checks form submission
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $usernameInput = $_POST['username'];
         $passwordInput = $_POST['password'];
 
-        // Query to check if username and password exist in the database
+        // checks for username and password in database
         $sql = "SELECT * FROM $tableName WHERE UserName = '$usernameInput' AND UserPass = '$passwordInput'";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
-            // Fetch store ID associated with the logged-in user
+            // checks which store the user is associated with
             $row = $result->fetch_assoc();
             $storeID = $row['Store_ID'];
 
             if ($storeID == 0) {
+                // if user is a head office member, redirects to head office page with all stores listed
                 header("Location: head_office.php?storeID=$storeID");
                 exit();
             } else {
-                // Redirect to the individual store page with the store ID as a parameter
+                // if user is a member of a store, redirects to individual store page
                 header("Location: individual_store.php?storeID=$storeID");
                 exit();
             }
             
         } else {
-            // Show error message or handle invalid login
+            // error message for invalid username or password
             echo '<script>alert("Invalid username or password");</script>';
         }
     }
 
-    // Close connection
+    // closes connection
     $conn->close();
     ?>
 </body>
