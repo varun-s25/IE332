@@ -147,7 +147,7 @@ document.querySelector('.add-data-button').addEventListener('click', function(ev
         $passwordInput = $_POST['password'];
 
         // checks for username and password in database
-        $sql = "SELECT * FROM $tableName WHERE UserName = '$usernameInput' AND UserPass = '$passwordInput'";
+        $sql = "SELECT * FROM $tableName WHERE User_Name = '$usernameInput' AND User_Pass = '$passwordInput'";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
