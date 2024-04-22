@@ -223,7 +223,7 @@ function generateMarketingData() {
 
 // Function to generate synthetic data for customer_service table
 function generateServiceData() {
-    global $$existingUserIDs;
+    global $existingUserIDs;
     global $existingMemberIDs;
     $data = array();
     $rowCount = rand(7, 15); // Generate a random number of rows between 7 and 15
@@ -427,7 +427,7 @@ function generateSalesData() {
             // Generate random values for each column
             $saleID = rand(1000000, 9999999); // Generate random sale ID (7-digit number)
             $quantitySold = rand(1, 100); // Generate random quantity sold
-            $productSalePrice = number_format(rand(1, 9999) / 100, 2); // Generate random sale price (convert to decimal)
+            $productSalePrice = number_format(rand(1, 1000000) / 100, 2); // Generate random sale price (convert to decimal)
             $saleDate = date('Y-m-d', strtotime('-' . rand(1, 30) . ' days')); // Generate random sale date within last 30 days
             $storeID = rand(1, 25); // Generate random store ID from 1 to 25
             $productID = rand(1,$maxEntries);

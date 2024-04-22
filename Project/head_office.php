@@ -146,14 +146,12 @@
             <div class="tab erp-tab" data-target="erp-accounting-financial-management">Accounting/Financial Management</div>
             <div class="tab erp-tab" data-target="erp-human-resources">Human Resources</div>
             <div class="tab erp-tab" data-target="erp-store-management">Store Management</div>
-            <div class="tab erp-tab" data-target="erp-business-intelligence">Business Intelligence</div>
             <div class="tab crm-tab" data-target="crm-sales">Sales</div>
             <div class="tab crm-tab" data-target="crm-membership-management">Membership Management</div>
             <div class="tab crm-tab" data-target="crm-customer-service">Customer Service</div>
             <div class="tab crm-tab" data-target="crm-marketing-communication-channels">Marketing/Communication Channels</div>
             <div class="tab scm-tab" data-target="scm-inventory-management">Inventory Management</div>
             <div class="tab scm-tab" data-target="scm-order-management">Order Management</div>
-            <div class="tab scm-tab" data-target="scm-warehouse-management">Warehouse Management</div>
             <div class="tab scm-tab" data-target="scm-transportation-management">Transportation Management</div>
         </div>
     </div>
@@ -168,9 +166,6 @@
         <div class="division erp-store-management" style="color:black">
             Store Management<br>(Graph/Table Placeholder)
         </div>
-        <div class="division erp-business-intelligence" style="color:black">
-            Business Intelligence<br>(Graph/Table Placeholder)
-        </div>
         <div class="division crm-sales" style="color:black">
             Sales<br>(Graph/Table Placeholder)
         </div>
@@ -178,19 +173,143 @@
             Membership Management<br>(Graph/Table Placeholder)
         </div>
         <div class="division crm-customer-service" style="color:black">
-            Customer Service<br>(Graph/Table Placeholder)
+            <?php
+            // Establish connection to MySQL database
+            $connection = mysqli_connect("mydb.ics.purdue.edu", "g1130865", "GroupNine", "g1130865");
+
+            // Check connection
+            if ($connection === false) {
+                die("ERROR: Could not connect. " . mysqli_connect_error());
+            }
+
+            // Query to calculate average service rating for a specific store
+            $queryRating = "SELECT AVG(Service_Rating) AS avg_rating FROM customer_service";
+
+            // Execute the query for average service rating
+            $resultRating = mysqli_query($connection, $queryRating);
+
+            // Query to calculate average service time for a specific store
+            $queryTime = "SELECT AVG(Service_Time) AS avg_time FROM customer_service";
+
+            // Execute the query for average service time
+            $resultTime = mysqli_query($connection, $queryTime);
+
+            // Close the database connection
+            mysqli_close($connection);
+            ?>
+
+            <div class="popup-banner" style="background-color: #f2f2f2; padding: 10px; margin-bottom: 10px; text-align: center;">
+                <span style="font-size: 2em;">
+                    <span style="font-weight: bold;"> Average Service Rating (/10): </span> 
+                    <?php
+                    // Check if the query for average service rating was successful
+                    if ($resultRating) {
+                        // Fetch the result
+                        $rowRating = mysqli_fetch_assoc($resultRating);
+                        $averageRating = $rowRating['avg_rating'];
+
+                        // Determine the color based on the average rating
+                        $colorRating = '';
+                        if ($averageRating < 4) {
+                            $colorRating = 'red';
+                        } elseif ($averageRating >= 4 && $averageRating <= 7) {
+                            $colorRating = 'orange';
+                        } else {
+                            $colorRating = 'green';
+                        }
+
+                        // Display the average service rating with the determined color
+                        echo '<span style="font-size: 1.2em; color: ' . $colorRating . ';">' . round($averageRating, 2) . '</span>'; // Round to two decimal places
+                    } else {
+                        // If the query fails, handle the error
+                        echo "Error: " . mysqli_error($connection);
+                    }
+                    ?>
+                </span>
+                <span style="margin-left: 20px; margin-right: 20px; font-size: 2em;">
+                    <span style="font-weight: bold;"> Average Service Time (min): </span>
+                    <?php
+                    // Check if the query for average service time was successful
+                    if ($resultTime) {
+                        // Fetch the result
+                        $rowTime = mysqli_fetch_assoc($resultTime);
+                        $averageTime = $rowTime['avg_time'];
+
+                        // Determine the color based on the average time
+                        $colorTime = '';
+                        if ($averageTime < 15) {
+                            $colorTime = 'green';
+                        } elseif ($averageTime >= 15 && $averageTime <= 30) {
+                            $colorTime = 'orange';
+                        } else {
+                            $colorTime = 'red';
+                        }
+
+                        // Display the average service time with the determined color
+                        echo '<span style="font-size: 1.2em; color: ' . $colorTime . ';">' . round($averageTime, 2) . '</span>'; // Round to two decimal places
+                    } else {
+                        // If the query fails, handle the error
+                        echo "Error: " . mysqli_error($connection);
+                    }
+                    ?>
+                </span>
+            </div>
         </div>
         <div class="division crm-marketing-communication-channels" style="color:black">
-            Marketing<br>(Graph/Table Placeholder)
-        </div>
+            <?php
+                // Establish connection to MySQL database
+                $connection = mysqli_connect("mydb.ics.purdue.edu", "g1130865", "GroupNine", "g1130865");
+
+                // Check connection
+                if ($connection === false) {
+                    die("ERROR: Could not connect. " . mysqli_connect_error());
+                }
+
+                // Query to calculate average engagement rating for a specific store
+                $queryRating = "SELECT AVG(Engagement_Rating) AS avg_engagement FROM marketing_communication_channels";
+
+                // Execute the query for average service rating
+                $engagementRating = mysqli_query($connection, $queryRating);
+
+                // Close the database connection
+                mysqli_close($connection);
+            ?>
+
+                <div class="popup-banner" style="background-color: #f2f2f2; padding: 10px; margin-bottom: 10px; text-align: center;">
+                    <span style="font-size: 2em;">
+                        <span style="font-weight: bold;"> Average Engagement Rating (/100): </span> 
+                        <?php
+                        // Check if the query for average service rating was successful
+                        if ($engagementRating) {
+                            // Fetch the result
+                            $rowRating = mysqli_fetch_assoc($engagementRating);
+                            $averageRating = $rowRating['avg_engagement'];
+
+                            // Determine the color based on the average rating
+                            $colorRating = '';
+                            if ($averageRating < 40) {
+                                $colorRating = 'red';
+                            } elseif ($averageRating >= 40 && $averageRating <= 70) {
+                                $colorRating = 'orange';
+                            } else {
+                                $colorRating = 'green';
+                            }
+
+                            // Display the average service rating with the determined color
+                            echo '<span style="font-size: 1.2em; color: ' . $colorRating . ';">' . round($averageRating, 2) . '</span>'; // Round to two decimal places
+                        } else {
+                            // If the query fails, handle the error
+                            echo "Error: " . mysqli_error($connection);
+                        }
+                        ?>
+                    </span>
+                </div>
+        </div>    
         <div class="division scm-inventory-management" style="color:black">
             Inventory Management<br>(Graph/Table Placeholder)
         </div>
         <div class="division scm-order-management" style="color:black">
             Order Management<br>(Graph/Table Placeholder)
-        </div>
-        <div class="division scm-warehouse-management" style="color:black">
-            Warehouse Management<br>(Graph/Table Placeholder)
         </div>
         <div class="division scm-transportation-management" style="color:black">
             Transportation Management<br>(Graph/Table Placeholder)
