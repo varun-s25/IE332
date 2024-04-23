@@ -25,15 +25,6 @@ if ($result) {
     $result->free();
 }
 
-// Query for the total transportation price per store
-$transportationPrices = [];
-$result = $conn->query("SELECT Store_ID, SUM(Product_Transporation_Price) AS TotalPrice FROM transportation_management GROUP BY Store_ID");
-if ($result) {
-    while ($row = $result->fetch_assoc()) {
-        $transportationPrices[$row['Store_ID']] = $row['TotalPrice'];
-    }
-    $result->free();
-}
 
 $conn->close();
 ?>
@@ -44,32 +35,18 @@ $conn->close();
     <meta charset="UTF-8">
     <title>Transportation Management Statistics</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        .chart-container {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 20px;
-        }
-        canvas {
-            width: 100%;
-            max-width: 600px;
-        }
-    </style>
 </head>
 <body>
     <h1>Transportation Management Statistics</h1>
     <div class="chart-container">
         <canvas id="shipmentMethodChart"></canvas>
-        <canvas id="transportationPriceChart"></canvas>
     </div>
 
     <script>
         const shipmentCounts = <?php echo json_encode($shipmentCounts); ?>;
-        const transportationPrices = <?php echo json_encode($transportationPrices); ?>;
+        
 
         const methodCtx = document.getElementById('shipmentMethodChart').getContext('2d');
-        const priceCtx = document.getElementById('transportationPriceChart').getContext('2d');
 
         // Bar chart for shipment method counts
         new Chart(methodCtx, {
@@ -86,6 +63,9 @@ $conn->close();
             },
             options: {
                 plugins: {
+                    legend: {
+                        display: false
+                    },
                     title: {
                         display: true,
                         text: 'Total Number of Each Shipping Method'
@@ -109,43 +89,7 @@ $conn->close();
             }
         });
 
-        // Bar chart for transportation prices by store
-        new Chart(priceCtx, {
-            type: 'bar',
-            data: {
-                labels: Object.keys(transportationPrices),
-                datasets: [{
-                    label: 'Total Transportation Price by Store',
-                    data: Object.values(transportationPrices),
-                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                    borderColor: 'rgba(255, 159, 64, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Total Product Transportation Price by Store ID'
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Total Transportation Price ($)'
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Store ID'
-                        }
-                    }
-                }
-            }
-        });
+        
     </script>
 </body>
 </html>

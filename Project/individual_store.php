@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Individual Store Page</title>
     <link rel="stylesheet" href="individual_store_styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
     <!-- PHP code to retrieve store name from the database using store ID -->
     <?php
@@ -15,7 +18,7 @@
     $passwordDB = "GroupNine"; // Change this to your database password
     $dbname = "g1130865"; // Change this to your database name
     $storeID = isset($_GET['storeID']) ? $_GET['storeID'] : null; // Get store ID from URL parameter
-
+    
     // Create connection
     $conn = new mysqli($servername, $usernameDB, $passwordDB, $dbname);
 
@@ -66,6 +69,76 @@
     <div class="content-container">
         <div class="division erp-human-resources" style="color:black">
             Human Resources<br>(Graph/Table Placeholderrrr)
+
+            <?php
+            ini_set('display_errors', 1);
+            error_reporting(E_ALL);
+
+            $server = 'mydb.ics.purdue.edu';
+            $dbname = 'g1130865';
+            $username = 'g1130865';
+            $password = 'GroupNine';
+
+            $conn = new mysqli($server, $username, $password, $dbname);
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            $storeID = isset($_GET['storeID']) ? $_GET['storeID'] : null;
+            $applicants = [];  // Initialize an empty array to store applicant data
+            
+
+                // Prepare and execute the SQL query
+                $query = $conn->prepare("SELECT Applicant_First_Name, Applicant_Last_Name, Applicant_Phone, Application_Status FROM human_resources WHERE Store_ID = ?");
+                if ($query) {
+                    $query->bind_param("i", $storeID);
+                    $query->execute();
+
+                    // Bind result variables
+                    $query->bind_result($firstName, $lastName, $phone, $status);
+
+                    // Fetch values
+                    while ($query->fetch()) {
+                        $applicants[] = [
+                            'Applicant_First_Name' => $firstName,
+                            'Applicant_Last_Name' => $lastName,
+                            'Applicant_Phone' => $phone,
+                            'Application_Status' => $status
+                        ];
+                    }
+                    $query->close();
+                } else {
+                    echo "Failed to prepare the query: " . htmlspecialchars($conn->error);
+                }
+            
+            $conn->close();
+            ?>
+
+            <h1>Applicant Information Viewer</h1>
+
+            <?php if (!empty($applicants)): ?>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Phone Number</th>
+                            <th>Application Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($applicants as $applicant): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($applicant['Applicant_First_Name']); ?></td>
+                                <td><?php echo htmlspecialchars($applicant['Applicant_Last_Name']); ?></td>
+                                <td><?php echo htmlspecialchars($applicant['Applicant_Phone']); ?></td>
+                                <td><?php echo htmlspecialchars($applicant['Application_Status']); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
+
         </div>
         <div class="division erp-store-management" style="color:black">
             Store Management<br>(Graph/Table Placeholder)
@@ -102,9 +175,10 @@
             mysqli_close($connection);
             ?>
 
-            <div class="popup-banner" style="background-color: #f2f2f2; padding: 10px; margin-bottom: 10px; text-align: center;">
+            <div class="popup-banner"
+                style="background-color: #f2f2f2; padding: 10px; margin-bottom: 10px; text-align: center;">
                 <span style="font-size: 2em;">
-                    <span style="font-weight: bold;"> Average Service Rating (/10): </span> 
+                    <span style="font-weight: bold;"> Average Service Rating (/10): </span>
                     <?php
                     // Check if the query for average service rating was successful
                     if ($resultRating) {
@@ -161,14 +235,179 @@
             Customer Service<br>(Graph/Table Placeholder)
         </div>
         <div class="division scm-inventory-management" style="color:black">
-            Inventory Management<br>(Graph/Table Placeholder)
+            Inventory Management<br>
+            <?php
+            ini_set('display_errors', 1);
+            error_reporting(E_ALL);
+
+            $server = 'mydb.ics.purdue.edu';  // Your database host
+            $dbname = 'g1130865';  // Your database name
+            $username = 'g1130865';  // Your database username
+            $password = 'GroupNine';  // Your database password
+            $storeID = isset($_GET['storeID']) ? $_GET['storeID'] : null;
+
+            // Create connection
+            $conn = new mysqli($server, $username, $password, $dbname);
+
+            // Check connection
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            $inventory = [];
+
+            // Prepare and execute the SQL query for inventory
+            $query = $conn->prepare("SELECT Product_ID, Quantity FROM inventory_management WHERE Store_ID = ?");
+            if ($query) {
+                $query->bind_param("i", $storeID);
+                $query->execute();
+
+                // Bind variables to the prepared statement as result variables
+                $query->bind_result($productID, $quantity);
+
+                // Fetch values one by one
+                while ($query->fetch()) {
+                    $inventory[] = [
+                        'Product_ID' => $productID,
+                        'Quantity' => $quantity
+                    ];
+                }
+                $query->close();
+            } else {
+                echo "Failed to prepare the query: " . htmlspecialchars($conn->error);
+            }
+
+            $conn->close();
+            ?>
+
+            <h1>Inventory Viewer</h1>
+
+            <?php
+            echo "Store ID: " . htmlspecialchars($storeID);
+
+            echo "<pre>";
+            print_r($inventory);
+            echo "</pre>";
+
+            ?>
+
+            <?php if (!empty($inventory)): ?>
+
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Product ID</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($inventory as $item): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($item['Product_ID']); ?></td>
+                                <td><?php echo htmlspecialchars($item['Quantity']); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
         </div>
-        <div class="division scm-order-management" style="color:black">
-            Order Management<br>(Graph/Table Placeholder)
-        </div>
-        <div class="division scm-transportation-management" style="color:black">
-            Transportation Management<br>(Graph/Table Placeholder)
-        </div>
+    </div>
+    <div class="division scm-order-management" style="color:black">
+        Order Management<br>(Graph/Table Placeholder)
+    </div>
+    <div class="division scm-transportation-management" style="color:black">
+    <?php
+            ini_set('display_errors', 1);
+            error_reporting(E_ALL);
+
+            $server = 'mydb.ics.purdue.edu';  // Your database host
+            $dbname = 'g1130865';  // Your database name
+            $username = 'g1130865';  // Your database username
+            $password = 'GroupNine';  // Your database password
+            $storeID = isset($_GET['storeID']) ? $_GET['storeID'] : null;
+            // Create connection
+            $conn = new mysqli($server, $username, $password, $dbname);
+
+            // Check connection
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            // Query for the count of each shipment method
+            $shipmentCounts = [];
+            $query = $conn->prepare("SELECT Shipment_Method, COUNT(*) AS MethodCount FROM transportation_management WHERE Store_ID = ? GROUP BY Shipment_Method ");
+            if ($query) {
+                $query->bind_param("i", $storeID);
+                $query->execute();
+
+                $query->bind_result($shipmentMethod, $methodCount);
+
+                while($query->fetch()) {
+                    $shipmentCounts[$shipmentMethod] = $methodCount;
+                }
+            } else {
+                echo "Failed to prepare the query: " . htmlspecialchars($conn->error);
+            }
+
+
+            $conn->close();
+            ?>
+
+            <h1>Transportation Management Statistics</h1>
+            <div class="chart-container">
+                <canvas id="shipmentMethodChart"></canvas>
+            </div>
+
+            <script>
+                const shipmentCounts = <?php echo json_encode($shipmentCounts); ?>;
+
+
+                const methodCtx = document.getElementById('shipmentMethodChart').getContext('2d');
+
+                // Bar chart for shipment method counts
+                new Chart(methodCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(shipmentCounts),
+                        datasets: [{
+                            label: 'Number of Shipments per Method',
+                            data: Object.values(shipmentCounts),
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            title: {
+                                display: true,
+                                text: 'Total Number of Each Shipping Method'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Number of Shipments'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Shipment Method'
+                                }
+                            }
+                        }
+                    }
+                });
+
+
+            </script>
+    </div>
     </div>
 
     <script>
@@ -286,4 +525,5 @@
 
     </script>
 </body>
+
 </html>

@@ -135,7 +135,7 @@ document.querySelector('.add-data-button').addEventListener('click', function(ev
 
             if ($storeID == 0) {
                 // if user is a head office member, redirects to head office page with all stores listed
-                header("Location: head_office.php?storeID=$storeID");
+                header("Location: head_office_g.php?storeID=$storeID");
                 exit();
             } else {
                 // if user is a member of a store, redirects to individual store page

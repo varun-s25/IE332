@@ -200,7 +200,7 @@
                 die("Connection failed: " . $conn->connect_error);
             }
 
-            $storeID = '';  // Initialize the storeID variable
+            $storeID = 0;  // Initialize the storeID variable
             $applicants = [];  // Initialize an empty array to store applicant data
             
             if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['store_id']) && $_POST['store_id'] !== '') {
@@ -233,10 +233,6 @@
             ?>
 
             <h1>Applicant Information Viewer</h1>
-            <form method="post">
-                Enter Store ID: <input type="text" name="store_id" value="<?php echo htmlspecialchars($storeID); ?>">
-                <button type="submit">View Applicants</button>
-            </form>
 
             <?php if (!empty($applicants)): ?>
                 <table border="1">
@@ -979,7 +975,6 @@
 
         </div>
         <div class="division scm-inventory-management" style="color:black">
-            Inventory Management<br>
             <?php
             ini_set('display_errors', 1);
             error_reporting(E_ALL);
@@ -988,8 +983,7 @@
             $dbname = 'g1130865';  // Your database name
             $username = 'g1130865';  // Your database username
             $password = 'GroupNine';  // Your database password
-            $storeID = isset($_GET['storeID']) ? $_GET['storeID'] : null;
-
+            
             // Create connection
             $conn = new mysqli($server, $username, $password, $dbname);
 
@@ -1001,19 +995,19 @@
             $inventory = [];
 
             // Prepare and execute the SQL query for inventory
-            $query = $conn->prepare("SELECT Product_ID, Quantity FROM inventory_management WHERE Store_ID = ?");
+            $query = $conn->prepare("SELECT Product_ID, Quantity, Store_ID FROM inventory_management");
             if ($query) {
-                $query->bind_param("i", $storeID);
                 $query->execute();
 
                 // Bind variables to the prepared statement as result variables
-                $query->bind_result($productID, $quantity);
+                $query->bind_result($productID, $quantity, $storeID);
 
                 // Fetch values one by one
                 while ($query->fetch()) {
                     $inventory[] = [
                         'Product_ID' => $productID,
-                        'Quantity' => $quantity
+                        'Quantity' => $quantity,
+                        'Store_ID' => $storeID
                     ];
                 }
                 $query->close();
@@ -1025,8 +1019,6 @@
             ?>
 
             <h1>Inventory Viewer</h1>
-            echo "Store ID: " . htmlspecialchars($storeID);
-
 
             <?php if (!empty($inventory)): ?>
                 <table border="1">
@@ -1034,6 +1026,7 @@
                         <tr>
                             <th>Product ID</th>
                             <th>Quantity</th>
+                            <th>Store ID</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1041,6 +1034,7 @@
                             <tr>
                                 <td><?php echo htmlspecialchars($item['Product_ID']); ?></td>
                                 <td><?php echo htmlspecialchars($item['Quantity']); ?></td>
+                                <td><?php echo htmlspecialchars($item['Store_ID']); ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -1185,7 +1179,91 @@
             </script>
         </div>
         <div class="division scm-transportation-management" style="color:black">
-            Transportation Management<br>(Graph/Table Placeholder)
+            <?php
+            ini_set('display_errors', 1);
+            error_reporting(E_ALL);
+
+            $server = 'mydb.ics.purdue.edu';  // Your database host
+            $dbname = 'g1130865';  // Your database name
+            $username = 'g1130865';  // Your database username
+            $password = 'GroupNine';  // Your database password
+            
+            // Create connection
+            $conn = new mysqli($server, $username, $password, $dbname);
+
+            // Check connection
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            // Query for the count of each shipment method
+            $shipmentCounts = [];
+            $result = $conn->query("SELECT Shipment_Method, COUNT(*) AS MethodCount FROM transportation_management GROUP BY Shipment_Method");
+            if ($result) {
+                while ($row = $result->fetch_assoc()) {
+                    $shipmentCounts[$row['Shipment_Method']] = $row['MethodCount'];
+                }
+                $result->free();
+            }
+
+
+            $conn->close();
+            ?>
+
+            <h1>Transportation Management Statistics</h1>
+            <div class="chart-container">
+                <canvas id="shipmentMethodChart"></canvas>
+            </div>
+
+            <script>
+                const shipmentCounts = <?php echo json_encode($shipmentCounts); ?>;
+
+
+                const methodCtx = document.getElementById('shipmentMethodChart').getContext('2d');
+
+                // Bar chart for shipment method counts
+                new Chart(methodCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(shipmentCounts),
+                        datasets: [{
+                            label: 'Number of Shipments per Method',
+                            data: Object.values(shipmentCounts),
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            title: {
+                                display: true,
+                                text: 'Total Number of Each Shipping Method'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Number of Shipments'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Shipment Method'
+                                }
+                            }
+                        }
+                    }
+                });
+
+
+            </script>
         </div>
     </div>
 
