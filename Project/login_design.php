@@ -4,68 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        .banner {
-            background-color: #333;
-            color: #fff;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .banner h1 {
-            margin: 0;
-            font-size: 1.5rem;
-        }
-        .login-form {
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            width: 300px;
-        }
-        .input-group {
-            margin-bottom: 15px;
-        }
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .input-group input {
-            width: 92%;
-            padding: 10px;
-            font-size: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .input-group button {
-            padding: 10px 20px;
-            background-color: #555;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s ease;
-        }
-        .input-group button:hover {
-            background-color: #444;
-        }
-    
-        .add-data-button {
-            margin-left: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="login_design_styles.css">
 </head>
 <body>
     <div class="banner">
@@ -164,10 +103,6 @@ document.querySelector('.add-data-button').addEventListener('click', function(ev
 });
 </script>
 
-
-
-
-
     <?php
     session_start();
     // connecting to mysql database
@@ -219,5 +154,3 @@ document.querySelector('.add-data-button').addEventListener('click', function(ev
     ?>
 </body>
 </html>
-
-
