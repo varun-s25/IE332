@@ -202,9 +202,6 @@
 
             $storeID = 0;  // Initialize the storeID variable
             $applicants = [];  // Initialize an empty array to store applicant data
-            
-            if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['store_id']) && $_POST['store_id'] !== '') {
-                $storeID = $_POST['store_id'];
 
                 // Prepare and execute the SQL query
                 $query = $conn->prepare("SELECT Applicant_First_Name, Applicant_Last_Name, Applicant_Phone, Application_Status FROM human_resources WHERE Store_ID = ?");
@@ -228,7 +225,6 @@
                 } else {
                     echo "Failed to prepare the query: " . htmlspecialchars($conn->error);
                 }
-            }
             $conn->close();
             ?>
 
