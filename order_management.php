@@ -2,144 +2,61 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-$server = 'mydb.ics.purdue.edu';  // Your database host
-$dbname = 'g1130865';  // Your database name
-$username = 'g1130865';  // Your database username
-$password = 'GroupNine';  // Your database password
+$server = 'mydb.ics.purdue.edu';
+$dbname = 'g1130865';
+$username = 'g1130865';
+$password = 'GroupNine';
+$tableData = "";
 
-// Create connection
+$storeID = isset($_GET['storeID']) ? $_GET['storeID'] : null;
+
 $conn = new mysqli($server, $username, $password, $dbname);
-
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Query for number of orders per store
-$orderCounts = [];
-$result = $conn->query("SELECT Store_ID, COUNT(*) as OrderCount FROM order_management GROUP BY Store_ID");
-if ($result) {
-    while ($row = $result->fetch_assoc()) {
-        $orderCounts[$row['Store_ID']] = $row['OrderCount'];
-    }
-    $result->free();
-}
+$sql = "SELECT Placement_Date, Arrival_Date, Product_ID, Product_Order_Price, Order_ID FROM order_management WHERE Store_ID = ?";
+$stmt = $conn->prepare($sql);
+if ($stmt) {
+    $stmt->bind_param("i", $storeID);
+    $stmt->execute();
 
-// Query for total price per store
-$totalPrices = [];
-$result = $conn->query("SELECT Store_ID, SUM(Product_Order_Price) as TotalPrice FROM order_management GROUP BY Store_ID");
-if ($result) {
-    while ($row = $result->fetch_assoc()) {
-        $totalPrices[$row['Store_ID']] = $row['TotalPrice'];
-    }
-    $result->free();
-}
+    // Bind the result variables
+    $stmt->bind_result($placementDate, $arrivalDate, $productID, $productOrderPrice, $orderID);
 
+    // Start the table
+    $tableData = "<table border='1'><tr><th>Placement Date</th><th>Arrival Date</th><th>Product ID</th><th>Product Order Price</th><th>Order ID</th></tr>";
+    $hasResults = false;
+
+    // Fetch values
+    while ($stmt->fetch()) {
+        $hasResults = true;
+        $tableData .= "<tr><td>" . htmlspecialchars($placementDate) . "</td><td>" . htmlspecialchars($arrivalDate) . "</td><td>" . htmlspecialchars($productID) . "</td><td>" . htmlspecialchars($productOrderPrice) . "</td><td>" . htmlspecialchars($orderID) . "</td></tr>";
+    }
+    if (!$hasResults) {
+        $tableData .= "<tr><td colspan='5'>0 results</td></tr>";
+    }
+    $tableData .= "</table>";
+    $stmt->close();
+} else {
+    $tableData = "Error preparing statement: " . htmlspecialchars($conn->error);
+}
 $conn->close();
-?>
 
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Store Order Statistics</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Order Details by Store</title>
 </head>
+
 <body>
-    <h1>Store Order Statistics</h1>
-    <div>
-        <canvas id="ordersChart"></canvas>
-        <canvas id="pricesChart"></canvas>
-    </div>
+    <h1>Lookup Order Details by Store ID</h1>
 
-    <script>
-        const orderCounts = <?php echo json_encode($orderCounts); ?>;
-        const totalPrices = <?php echo json_encode($totalPrices); ?>;
-
-        const ordersCtx = document.getElementById('ordersChart').getContext('2d');
-        const pricesCtx = document.getElementById('pricesChart').getContext('2d');
-
-        // Bar chart for number of orders per store
-        new Chart(ordersCtx, {
-            type: 'bar',
-            data: {
-                labels: Object.keys(orderCounts),
-                datasets: [{
-                    label: 'Number of Orders per Store',
-                    data: Object.values(orderCounts),
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Number of Orders per Store'
-                    },
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Number of Orders'
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Store ID'
-                        }
-                    }
-                }
-            }
-        });
-
-        // Bar chart for total product order price per store
-        new Chart(pricesCtx, {
-            type: 'bar',
-            data: {
-                labels: Object.keys(totalPrices),
-                datasets: [{
-                    label: 'Total Product Order Price per Store',
-                    data: Object.values(totalPrices),
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Total Product Order Price per Store'
-                    },
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Total Order Price ($)'
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Store ID'
-                        }
-                    }
-                }
-            }
-        });
-    </script>
+    <!-- Display the table with results if any -->
+    <?php echo $tableData; ?>
 </body>
+
 </html>
