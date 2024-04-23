@@ -4,6 +4,30 @@
 <meta charset="UTF-8">
     <title>Customer Service</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            display:flex;
+            justify-content:space-around;
+            align-items: flex-start;
+            padding:10px;
+            flex-wrap:wrap;
+        }
+
+        .scrollable-chart {
+            width: 600px;
+            height: 400px;
+            overflow: auto;
+            border: 1px solid #ccc;
+            margin: 10px;
+        }
+        
+        canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+    </style>
+        
 </head>
 
 <?php
@@ -18,72 +42,156 @@ if($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT Store_ID, COUNT(*) as inquiry_count FROM customer_service GROUP BY Store_ID";
-$result = $conn->query($sql);
+$sqlChart1 = "SELECT Store_ID, COUNT(*) as inquiry_count FROM customer_service GROUP BY Store_ID";
+$resultChart1 = $conn->query($sqlChart1);
 
-$data = [];
-if($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
-        $data[] = $row;
+$chart1Data = [];
+if($resultChart1->num_rows > 0) {
+    while($row = $resultChart1->fetch_assoc()) {
+        $chart1Data[] = $row;
     }
 } else {
     echo "[]";
 }
+
+$sqlChart2 = "SELECT Service_Type, COUNT(*) as count FROM customer_service GROUP BY Service_Type";
+$resultChart2 = $conn->query($sqlChart2);
+
+$chart2Data = [];
+if($resultChart2->num_rows > 0) {
+    while ($row = $resultChart2->fetch_assoc())
+    {
+        $chart2Data[] = $row;
+    }
+}
+
+
+
 $conn->close();
 
 
-echo json_encode($data);
+echo "<script>";
+echo "const chart1Data =  ", json_encode($chart1Data) . ";";
+echo "const chart2Data = ", json_encode($chart2Data) . ";";
+echo "</script>";
 ?>
 
 
 <body>
-    <canvas id="chart1"></canvas>
-    <canvas id="chart2"></canvas>
 
+<div class="chart-container">
+    <div class ="scrollable-chart">
+        <canvas id = "chart1"></canvas>
+    </div>
+    <div class = "scrollable-chart">
+        <canvas id = "chart2"></canvas>
+    </div>
+</div>
     <script>
-        const data = <?php echo json_encode($data); ?>;
         // Chart 1
         const ctx = document.getElementById('chart1').getContext('2d');
         const chart1 = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: data.map(item=>item.Store_ID),
+                labels: chart1Data.map(item=>item.Store_ID),
                 datasets: [{
                     label: 'Number of Service Inquiries',
-                    data: data.map(item=>item.inquiry_count),
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
+                    data: chart1Data.map(item=>item.inquiry_count),
+                    backgroundColor: 'rgba(0, 0, 139, 0.2)',
+                    borderColor: 'rgba(0, 0, 139, 1)',
                     borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: true,
+                legend: {
+                    display: false
+                },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        },
+                        title: {
+                            display: true,
+                            text: 'Number of Inquiries',
+                            color: "#666",
+                            font: {
+                                family: 'Arial',
+                                size: 16,
+                                weight: 'bold',
+                                lineHeight: 1.2
+                            }
+                        }
+                    },
+                    x: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Store ID',
+                            color: "#666",
+                            font: {
+                                family: 'Arial',
+                                size: 16,
+                                weight: 'bold',
+                                lineHeight: 1.2
+                            }
+                        }
                     }
                 }
             }
         });
         // Chart 2
+
         var ctx2 = document.getElementById('chart2').getContext('2d');
         var chart2 = new Chart(ctx2, {
-            type: 'line',
+            type: 'bar',
             data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+                labels: chart2Data.map(item=>item.Service_Type),
                 datasets: [{
-                    label: 'Chart 2',
-                    data: [5, 10, 8, 12, 6, 9],
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
+                    label: '# of Services by Type',
+                    data: chart2Data.map(item=>item.count),
+                    backgroundColor: 'rgba(0, 0, 139, 0.2)',
+                    borderColor: 'rgba(0, 0, 139, 1)',
                     borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: true,
+                legend: {
+                    display: false
+                },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Inquiries',
+                            color: "#666",
+                            font: {
+                                family: 'Arial',
+                                size: 16,
+                                weight: 'bold',
+                                lineHeight: 1.2
+                            }
+                        }
+                    },
+                    x: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Service Type',
+                            color: "#666",
+                            font: {
+                                family: 'Arial',
+                                size: 16,
+                                weight: 'bold',
+                                lineHeight: 1.2
+                            }
+                        }
                     }
                 }
             }
