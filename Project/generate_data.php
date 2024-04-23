@@ -1,4 +1,5 @@
 <?php
+
 // Database connection parameters
 $servername = "mydb.ics.purdue.edu"; // Change this to your server name
 $username = "g1130865"; // Change this to your database username
@@ -142,7 +143,9 @@ if (count($existingMemberIDs) > 0) {
     // Close connection
     $conn->close();
 } else {
-    echo "MemberIDs have been added. Add data again to produce all data";
+    // If no MemberIDs are available, refresh the page
+    echo "<script>alert('MemberIDs have been added. Refresh the page to generate all data');</script>";
+    echo "<script>setTimeout(function(){ location.reload(); }, 100);</script>"; // Reload the page after 2 seconds
 }
 
 // JavaScript code for the pop-up message and redirection
@@ -232,10 +235,9 @@ function generateMarketingData() {
         // Generate random values for each column
         $marketingID = rand(1000000, 9999999);
         $platformType = $platforms[array_rand($platforms)]; // Randomly select a platform from the list
-        $marketingTime = rand(1, 999); // Generate random marketing time
+        $marketingTime = rand(1, 30); // Generate random marketing time in days
         $engagementRating = rand(1, 99); // Generate random engagement rating
         $marketingPrice = rand(100, 99999) / 100; // Generate random marketing price (convert to decimal)
-        $storeID = rand(1, 25); // Generate random store ID from 1 to 25
 
         // Add generated data to the array
         $data[] = array(
@@ -243,8 +245,7 @@ function generateMarketingData() {
             'Platform_Type' => $platformType,
             'Marketing_Time' => $marketingTime,
             'Engagement_Rating' => $engagementRating,
-            'Marketing_Price' => $marketingPrice,
-            'Store_ID' => $storeID
+            'Marketing_Price' => $marketingPrice
         );
     }
     return $data;
@@ -253,6 +254,16 @@ function generateMarketingData() {
 function generateServiceData() {
     global $existingUserIDs;
     global $existingMemberIDs;
+
+    // Parse start_date and end_date from the URL
+    $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : date('Y-m-d', strtotime('-1 year'));
+    $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : date('Y-m-d');
+
+    // Convert start_date and end_date to timestamps
+    $start_timestamp = strtotime($start_date);
+    $end_timestamp = strtotime($end_date);
+
+
     $data = array();
     $serviceTypes = array("Technical Support", "Billing Inquiry", "Product Assistance", "Complaint Resolution");
 
@@ -274,6 +285,9 @@ function generateServiceData() {
         $serviceRating = rand(1, 10); // Generate random service rating (1 to 10)
         $serviceTime = rand(1, 45); // Generate random service time in minutes
         $storeID = rand(1, 25); // Generate random store ID from 1 to 25
+        // Generate random sale date within the provided start and end dates
+        $serviceDateTimestamp = mt_rand($start_timestamp, $end_timestamp);
+        $serviceDate = date('Y-m-d', $serviceDateTimestamp);
 
         // Add generated data to the array
         $data[] = array(
@@ -283,7 +297,8 @@ function generateServiceData() {
             'Service_Time' => $serviceTime,
             'Store_ID' => $storeID,
             'Member_ID' => $memberID,
-            'User_ID' => $userID
+            'User_ID' => $userID,
+            'Service_Date' => $serviceDate
         );
 
         // If 8 rows are reached, exit the loop
@@ -298,6 +313,15 @@ function generateServiceData() {
 // Function to generate synthetic data for order_management table
 function generateOrderData() {
     global $maxEntries;
+
+    // Parse start_date and end_date from the URL
+    $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : date('Y-m-d', strtotime('-1 year'));
+    $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : date('Y-m-d');
+
+    // Convert start_date and end_date to timestamps
+    $start_timestamp = strtotime($start_date);
+    $end_timestamp = strtotime($end_date);
+    
     $data = array();
     $rowCount = rand(7, 15); // Generate a random number of rows between 7 and 15
 
@@ -308,15 +332,22 @@ function generateOrderData() {
         // Generate random values for each column
         $orderID = rand(1000000, 9999999);
         $quantity = rand(1, 100); // Generate random quantity
-        $placementDate = date('Y-m-d', strtotime('-' . rand(1, 30) . ' days')); // Generate random placement date within last 30 days
-        $arrivalDate = date('Y-m-d', strtotime('+' . rand(1, 30) . ' days')); // Generate random arrival date within next 30 days
+        $placementDateTimestamp = mt_rand($start_timestamp, $end_timestamp);
+        $placementDate = date('Y-m-d', $placementDateTimestamp);        
+        $arrivalDate = date('Y-m-d', strtotime($placementDate . ' +' . rand(5, 20) . ' days')); // Arrival date 5 to 20 days after placement date        $storeID = rand(1, 25); // Generate random store ID from 1 to 25
         $storeID = rand(1, 25); // Generate random store ID from 1 to 25
-        
         if ($maxEntries > 7) {
             $productID = rand(1, $maxEntries);
         } else {
-            $productID = rand(1, 7);
+            $productIdRange = range(1, 7); // Array containing numbers from 1 to 7
+            
+            // Shuffle the array to randomize the order
+            shuffle($productIdRange);
+        
+            // Select the first element from the shuffled array
+            $productID = $productIdRange[0];
         }
+        
         $productPrice = number_format(rand(100, 10000) / 100, 2);
         $productType = $productTypes[array_rand($productTypes)]; // Randomly select
 
@@ -351,7 +382,7 @@ function generateTransportationData() {
 
             $shipmentID = rand(1000000, 9999999); // Generate random shipment ID (7-digit number)
             $shipmentMethod = $shipmentMethods[array_rand($shipmentMethods)]; // Randomly select a shipment method from the list
-            $transportationPrice = number_format((float)rand(100, 99999), 2, '.', ''); // Generate random transportation price with 2 decimal places
+            $transportationPrice = number_format((float)rand(50000, 30000), 2, '.', ''); // Generate random transportation price with 2 decimal places
             $storeID = rand(1, 25); // Generate random store ID from 1 to 25
 
             // Add generated data to the array
@@ -412,6 +443,15 @@ function generateHRData() {
 function generateExchangeData() {
     global $existingMemberIDs;
     global $maxEntries;
+
+    // Parse start_date and end_date from the URL
+    $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : date('Y-m-d', strtotime('-1 year'));
+    $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : date('Y-m-d');
+
+    // Convert start_date and end_date to timestamps
+    $start_timestamp = strtotime($start_date);
+    $end_timestamp = strtotime($end_date);
+
     $data = array();
     
     // Generate a random number of rows between 7 and 15
@@ -429,13 +469,18 @@ function generateExchangeData() {
         $exchangeID = rand(1000000, 9999999); // Generate random exchange ID (7-digit number)
         $storeID = rand(1, 25); // Generate random store ID from 1 to 25
         $productID = rand(0, $maxEntries);
+        // Generate random sale date within the provided start and end dates
+        $exchangeDateTimestamp = mt_rand($start_timestamp, $end_timestamp);
+        $exchangeDate = date('Y-m-d', $exchangeDateTimestamp);
 
         // Add generated data to the array
         $data[] = array(
             'Exchange_ID' => $exchangeID,
             'Store_ID' => $storeID,
             'Member_ID' => $MemberID,
-            'Product_ID' => $productID
+            'Product_ID' => $productID,
+            'Exchange_Date' => $exchangeDate
+
         );
     }
     return $data;
@@ -445,6 +490,16 @@ function generateExchangeData() {
 // Function to generate synthetic data for returns table
 function generateReturnData() {
     global $existingMemberIDs;
+
+    // Parse start_date and end_date from the URL
+    $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : date('Y-m-d', strtotime('-1 year'));
+    $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : date('Y-m-d');
+
+    // Convert start_date and end_date to timestamps
+    $start_timestamp = strtotime($start_date);
+    $end_timestamp = strtotime($end_date);
+
+
     $data = array();
     
     // Generate a random number of rows between 7 and 15
@@ -461,12 +516,16 @@ function generateReturnData() {
             // Generate random values for each column
             $returnID = rand(1000000, 9999999); // Generate random return ID (7-digit number)
             $storeID = rand(1, 25); // Generate random store ID from 1 to 25
+            // Generate random sale date within the provided start and end dates
+            $returnDateTimestamp = mt_rand($start_timestamp, $end_timestamp);
+            $returnDate = date('Y-m-d', $returnDateTimestamp);
 
             // Add generated data to the array
             $data[] = array(
                 'Return_ID' => $returnID,
                 'Store_ID' => $storeID,
-                'Member_ID' => $MemberID
+                'Member_ID' => $MemberID,
+                'Return_Date' => $returnDate
             );
         }    
     return $data;
@@ -476,6 +535,15 @@ function generateReturnData() {
 function generateSalesData() {
     global $maxEntries;
     global $existingMemberIDs;
+
+    // Parse start_date and end_date from the URL
+    $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : date('Y-m-d', strtotime('-1 year'));
+    $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : date('Y-m-d');
+
+    // Convert start_date and end_date to timestamps
+    $start_timestamp = strtotime($start_date);
+    $end_timestamp = strtotime($end_date);
+
     $data = array();
     $rowCount = rand(7, 15); // Generate a random number of rows between 7 and 15
 
@@ -487,27 +555,34 @@ function generateSalesData() {
 
     // Loop through each selected member ID
     foreach($selectedMemberIDs as $MemberID) {
-            // Generate random values for each column
-            $saleID = rand(1000000, 9999999); // Generate random sale ID (7-digit number)
-            $quantitySold = rand(1, 20); // Generate random quantity sold
-            $SalePrice = number_format(rand(1, 1000), 2); // Generate random sale price (convert to decimal)
-            $saleDate = date('Y-m-d', strtotime('-' . rand(1, 30) . ' days')); // Generate random sale date within last 30 days
-            $storeID = rand(1, 25); // Generate random store ID from 1 to 25
-            $productID = rand(1, $maxEntries);
+        // Generate random values for each column
+        $saleID = rand(1000000, 9999999); // Generate random sale ID (7-digit number)
+        $quantitySold = rand(1, 20); // Generate random quantity sold
+        $SalePrice = number_format(rand(1, 1000), 2); // Generate random sale price (convert to decimal)
 
-            // Add generated data to the array
-            $data[] = array(
-                'Sale_ID' => $saleID,
-                'Quantity_Sold' => $quantitySold,
-                'Sale_Price' => $SalePrice,
-                'Sale_Date' => $saleDate,
-                'Store_ID' => $storeID,
-                'Member_ID' => $MemberID,
-                'Product_ID' => $productID
-            );
-        }
+        // Generate random sale date within the provided start and end dates
+        $saleDateTimestamp = mt_rand($start_timestamp, $end_timestamp);
+        $saleDate = date('Y-m-d', $saleDateTimestamp);
+
+        $storeID = rand(1, 25); // Generate random store ID from 1 to 25
+        $productID = rand(1, $maxEntries);
+
+        // Add generated data to the array
+        $data[] = array(
+            'Sale_ID' => $saleID,
+            'Quantity_Sold' => $quantitySold,
+            'Sale_Price' => $SalePrice,
+            'Sale_Date' => $saleDate,
+            'Store_ID' => $storeID,
+            'Member_ID' => $MemberID,
+            'Product_ID' => $productID
+        );
+    }
+
     return $data;
 }
+
+
 
 // Function to generate a random string
 function generateRandomString($length = 10) {

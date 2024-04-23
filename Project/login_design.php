@@ -4,7 +4,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
-    <link rel="stylesheet" href="login_design_styles.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .banner {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .banner h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .login-form {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-group input {
+            width: 92%;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .input-group button {
+            padding: 10px 20px;
+            background-color: #555;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        .input-group button:hover {
+            background-color: #444;
+        }
+    
+        .add-data-button {
+            margin-left: 10px;
+        }
+    </style>
 </head>
 <body>
     <div class="banner">
@@ -29,7 +90,6 @@
     </div>
 
     <script>
-
 // time update function
 function updateTime() {
     const now = new Date(); // gets the current date and time
@@ -37,21 +97,66 @@ function updateTime() {
     datetimeElement.innerText = now.toLocaleString(); // sets the text content of the element to the current date and time
 }
 
+// function to validate date format
+function isValidDate(dateString) {
+    const dateRegex = /^\d{4}-(0[1-9]|1[0-2])-([0-2]\d|3[01])$/; // Updated regex to check month and day range
+    if (!dateRegex.test(dateString)) {
+        alert("Data not added. Invalid date.");
+        return false;
+    }
+    const [year, month, day] = dateString.split('-').map(Number);
+    if (month > 12) {
+        alert("Data not added. Invalid date. Month should be between 01 and 12.");
+        return false;
+    }
+    if (day > 31) {
+        alert("Data not added. Invalid date. Day should be between 01 and 31.");
+        return false;
+    }
+    return true;
+}
+
+
+// function to check if the given date is valid and not in the future
+function isPastDate(dateString) {
+    const inputDate = new Date(dateString);
+    const currentDate = new Date();
+    return inputDate <= currentDate;
+}
+
+// function to check if the given date is valid and not too far in the future
+function isFutureDate(dateString) {
+    const inputDate = new Date(dateString);
+    const currentDate = new Date();
+    return inputDate > currentDate; // Change the condition to check if the input date is after the current date
+}
+
 // function for generating data
 function addData() {
     var startDate = prompt("Enter start date (YYYY-MM-DD):");
     var endDate = prompt("Enter end date (YYYY-MM-DD):");
 
-    // checks for valid data entry
-    if (startDate && endDate) {
-        // redirects to PHP script to generate and insert synthetic data
-        window.location.href = "generate_data.php?start_date=" + startDate + "&end_date=" + endDate;
-    } else {
-        // displays notification about invalid date entry
-        alert("Data not added. Start/End date not entered.");
-        // refreshes login page after date is not added correctly
-        window.location.href = "login_design.php";
+    if (!isValidDate(startDate) || !isValidDate(endDate)) {
+        return;
     }
+
+    if (startDate >= endDate) {
+        alert("Data not added. End date must be after start date.");
+        return;
+    }
+
+    if (isPastDate(startDate) || isPastDate(endDate)) {
+        alert("Data not added. Start date and end date cannot be after the current date.");
+        return;
+    }
+
+    if (isFutureDate(startDate) || isFutureDate(endDate)) {
+        alert("Data not added. Start date and end date cannot be in the future.");
+        return;
+    }
+
+    // redirects to PHP script to generate and insert synthetic data
+    window.location.href = "generate_data.php?start_date=" + startDate + "&end_date=" + endDate;
 }
 
 updateTime();
@@ -63,6 +168,10 @@ document.querySelector('.add-data-button').addEventListener('click', function(ev
     addData(); // calls the addData function to prompt for dates
 });
 </script>
+
+
+
+
 
     <?php
     session_start();
@@ -115,3 +224,5 @@ document.querySelector('.add-data-button').addEventListener('click', function(ev
     ?>
 </body>
 </html>
+
+
