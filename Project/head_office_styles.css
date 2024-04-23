@@ -1,0 +1,109 @@
+/* CSS Stylesheet for Head Office Page */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.banner {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.banner h1 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.tabs-container {
+    display: flex;
+    flex-direction: column; /* Align tabs vertically */
+    align-items: center; /* Align tabs horizontally */
+    margin-top: 20px;
+}
+
+.tabs {
+    display: flex; /* Display tabs as flex items */
+    flex-wrap: nowrap; /* Prevent wrapping to next line */
+}
+
+.tab {
+    cursor: pointer;
+    padding: 10px 20px;
+    background-color: #99a3ad; /* slightly lighter color */
+    color: #fff;
+    border-radius: 5px;
+    margin: 5px;
+    transition: background-color 0.3s ease;
+    text-align: center; /* Center-align text */
+}
+
+.tab:hover {
+    background-color: #7f8a94; /* darker color on hover */
+}
+
+.tab.selected {
+    background-color: #555; /* even darker color for selected tab */
+}
+
+.content-container {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.division {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.dropdown {
+    margin-right: 20px;
+}
+
+.dropdown select {
+    padding: 10px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #555;
+    color: #fff;
+    cursor: pointer;
+}
+
+.dropdown select:hover {
+    background-color: #777;
+}
+
+.logout-button {
+    margin-right: 20px;
+    background-color: #555;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: #777;
+}
+
+.popup-banner {
+    background-color: #f2f2f2;
+    padding: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
