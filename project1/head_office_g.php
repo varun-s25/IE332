@@ -988,7 +988,8 @@
             $dbname = 'g1130865';  // Your database name
             $username = 'g1130865';  // Your database username
             $password = 'GroupNine';  // Your database password
-            
+            $storeID = isset($_GET['storeID']) ? $_GET['storeID'] : null;
+
             // Create connection
             $conn = new mysqli($server, $username, $password, $dbname);
 
@@ -997,41 +998,33 @@
                 die("Connection failed: " . $conn->connect_error);
             }
 
-            $storeID = '';
             $inventory = [];
 
-            if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['store_id']) && $_POST['store_id'] !== '') {
-                $storeID = $_POST['store_id'];
+            // Prepare and execute the SQL query for inventory
+            $query = $conn->prepare("SELECT Product_ID, Quantity FROM inventory_management WHERE Store_ID = ?");
+            if ($query) {
+                $query->bind_param("i", $storeID);
+                $query->execute();
 
-                // Prepare and execute the SQL query for inventory
-                $query = $conn->prepare("SELECT Product_ID, Quantity FROM inventory_management WHERE Store_ID = ?");
-                if ($query) {
-                    $query->bind_param("i", $storeID);
-                    $query->execute();
+                // Bind variables to the prepared statement as result variables
+                $query->bind_result($productID, $quantity);
 
-                    // Bind variables to the prepared statement as result variables
-                    $query->bind_result($productID, $quantity);
-
-                    // Fetch values one by one
-                    while ($query->fetch()) {
-                        $inventory[] = [
-                            'Product_ID' => $productID,
-                            'Quantity' => $quantity
-                        ];
-                    }
-                    $query->close();
-                } else {
-                    echo "Failed to prepare the query: " . htmlspecialchars($conn->error);
+                // Fetch values one by one
+                while ($query->fetch()) {
+                    $inventory[] = [
+                        'Product_ID' => $productID,
+                        'Quantity' => $quantity
+                    ];
                 }
+                $query->close();
+            } else {
+                echo "Failed to prepare the query: " . htmlspecialchars($conn->error);
             }
+
             $conn->close();
             ?>
 
             <h1>Inventory Viewer</h1>
-            <form method="post">
-                Enter Store ID: <input type="text" name="store_id" value="<?php echo htmlspecialchars($storeID); ?>">
-                <button type="submit">View Inventory</button>
-            </form>
 
             <?php if (!empty($inventory)): ?>
                 <table border="1">
