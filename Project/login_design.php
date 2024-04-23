@@ -140,18 +140,13 @@ function addData() {
         return;
     }
 
-    if (startDate >= endDate) {
-        alert("Data not added. End date must be after start date.");
+    if (!isPastDate(startDate) || isFutureDate(endDate)) {
+        alert("Start date should be in the past and end date should not be in the future.");
         return;
     }
 
-    if (isPastDate(startDate) || isPastDate(endDate)) {
-        alert("Data not added. Start date and end date cannot be after the current date.");
-        return;
-    }
-
-    if (isFutureDate(startDate) || isFutureDate(endDate)) {
-        alert("Data not added. Start date and end date cannot be in the future.");
+    if (new Date(startDate) >= new Date(endDate)) {
+        alert("Start date should be before end date.");
         return;
     }
 

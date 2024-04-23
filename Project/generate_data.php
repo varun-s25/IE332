@@ -164,7 +164,7 @@ function generateInventoryData() {
 
     for ($i = 0; $i < $rowCount; $i++) {
         // Generate random values for each column
-        $productID = rand(1,$maxEntries);
+        $productID = $maxEntries++; 
         $productType = $productTypes[array_rand($productTypes)]; // Randomly select
         $quantity = rand(1, 99999); // Generate random quantity
         $storeID = rand(1, 25); // Generate random store ID from 1 to 25
@@ -175,9 +175,7 @@ function generateInventoryData() {
             'Product_Type' => $productType,
             'Quantity' => $quantity,
             'Store_ID' => $storeID
-        );
-
-        $maxEntries++;
+        );;
     }
 
     return $data;
