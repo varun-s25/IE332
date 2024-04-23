@@ -88,29 +88,29 @@
             $applicants = [];  // Initialize an empty array to store applicant data
             
 
-                // Prepare and execute the SQL query
-                $query = $conn->prepare("SELECT Applicant_First_Name, Applicant_Last_Name, Applicant_Phone, Application_Status FROM human_resources WHERE Store_ID = ?");
-                if ($query) {
-                    $query->bind_param("i", $storeID);
-                    $query->execute();
+            // Prepare and execute the SQL query
+            $query = $conn->prepare("SELECT Applicant_First_Name, Applicant_Last_Name, Applicant_Phone, Application_Status FROM human_resources WHERE Store_ID = ?");
+            if ($query) {
+                $query->bind_param("i", $storeID);
+                $query->execute();
 
-                    // Bind result variables
-                    $query->bind_result($firstName, $lastName, $phone, $status);
+                // Bind result variables
+                $query->bind_result($firstName, $lastName, $phone, $status);
 
-                    // Fetch values
-                    while ($query->fetch()) {
-                        $applicants[] = [
-                            'Applicant_First_Name' => $firstName,
-                            'Applicant_Last_Name' => $lastName,
-                            'Applicant_Phone' => $phone,
-                            'Application_Status' => $status
-                        ];
-                    }
-                    $query->close();
-                } else {
-                    echo "Failed to prepare the query: " . htmlspecialchars($conn->error);
+                // Fetch values
+                while ($query->fetch()) {
+                    $applicants[] = [
+                        'Applicant_First_Name' => $firstName,
+                        'Applicant_Last_Name' => $lastName,
+                        'Applicant_Phone' => $phone,
+                        'Application_Status' => $status
+                    ];
                 }
-            
+                $query->close();
+            } else {
+                echo "Failed to prepare the query: " . htmlspecialchars($conn->error);
+            }
+
             $conn->close();
             ?>
 
@@ -141,7 +141,53 @@
 
         </div>
         <div class="division erp-store-management" style="color:black">
-            Store Management<br>(Graph/Table Placeholder)
+            <?php
+            ini_set('display_errors', 1);
+            error_reporting(E_ALL);
+
+            $server = 'mydb.ics.purdue.edu';
+            $dbname = 'g1130865';
+            $username = 'g1130865';
+            $password = 'GroupNine';
+            $storeID = isset($_GET['storeID']) ? $_GET['storeID'] : null;
+
+            $conn = new mysqli($server, $username, $password, $dbname);
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            $query = $conn->prepare("SELECT User_ID, First_Name, Last_Name FROM users WHERE Store_ID = ?");
+            $query->bind_param("i", $storeID);
+            $query->execute();
+
+            // Bind the result variables
+            $userID = $firstName = $lastName = null;
+            $query->bind_result($userID, $firstName, $lastName);
+
+            // Start the table
+            $tableData = "<table border='1'><tr><th>User ID</th><th>First Name</th><th>Last Name</th></tr>";
+            $resultFound = false;
+
+            // Fetch values
+            while ($query->fetch()) {
+                $resultFound = true;
+                $tableData .= "<tr><td>" . htmlspecialchars($userID) . "</td><td>" . htmlspecialchars($firstName) . "</td><td>" . htmlspecialchars($lastName) . "</td></tr>";
+            }
+
+            if (!$resultFound) {
+                $tableData .= "<tr><td colspan='3'>0 results</td></tr>";
+            }
+
+            $tableData .= "</table>";
+
+            $query->close();
+            $conn->close();
+            ?>
+
+            <h1>Employee List</h1>
+            <?php echo $tableData; ?>
+
+
         </div>
         <div class="division erp-business-intelligence" style="color:black">
             Business Intelligence<br>(Graph/Table Placeholder)
@@ -316,97 +362,97 @@
         Order Management<br>(Graph/Table Placeholder)
     </div>
     <div class="division scm-transportation-management" style="color:black">
-    <?php
-            ini_set('display_errors', 1);
-            error_reporting(E_ALL);
+        <?php
+        ini_set('display_errors', 1);
+        error_reporting(E_ALL);
 
-            $server = 'mydb.ics.purdue.edu';  // Your database host
-            $dbname = 'g1130865';  // Your database name
-            $username = 'g1130865';  // Your database username
-            $password = 'GroupNine';  // Your database password
-            $storeID = isset($_GET['storeID']) ? $_GET['storeID'] : null;
-            // Create connection
-            $conn = new mysqli($server, $username, $password, $dbname);
+        $server = 'mydb.ics.purdue.edu';  // Your database host
+        $dbname = 'g1130865';  // Your database name
+        $username = 'g1130865';  // Your database username
+        $password = 'GroupNine';  // Your database password
+        $storeID = isset($_GET['storeID']) ? $_GET['storeID'] : null;
+        // Create connection
+        $conn = new mysqli($server, $username, $password, $dbname);
 
-            // Check connection
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        // Query for the count of each shipment method
+        $shipmentCounts = [];
+        $query = $conn->prepare("SELECT Shipment_Method, COUNT(*) AS MethodCount FROM transportation_management WHERE Store_ID = ? GROUP BY Shipment_Method ");
+        if ($query) {
+            $query->bind_param("i", $storeID);
+            $query->execute();
+
+            $query->bind_result($shipmentMethod, $methodCount);
+
+            while ($query->fetch()) {
+                $shipmentCounts[$shipmentMethod] = $methodCount;
             }
-
-            // Query for the count of each shipment method
-            $shipmentCounts = [];
-            $query = $conn->prepare("SELECT Shipment_Method, COUNT(*) AS MethodCount FROM transportation_management WHERE Store_ID = ? GROUP BY Shipment_Method ");
-            if ($query) {
-                $query->bind_param("i", $storeID);
-                $query->execute();
-
-                $query->bind_result($shipmentMethod, $methodCount);
-
-                while($query->fetch()) {
-                    $shipmentCounts[$shipmentMethod] = $methodCount;
-                }
-            } else {
-                echo "Failed to prepare the query: " . htmlspecialchars($conn->error);
-            }
+        } else {
+            echo "Failed to prepare the query: " . htmlspecialchars($conn->error);
+        }
 
 
-            $conn->close();
-            ?>
+        $conn->close();
+        ?>
 
-            <h1>Transportation Management Statistics</h1>
-            <div class="chart-container">
-                <canvas id="shipmentMethodChart"></canvas>
-            </div>
+        <h1>Transportation Management Statistics</h1>
+        <div class="chart-container">
+            <canvas id="shipmentMethodChart"></canvas>
+        </div>
 
-            <script>
-                const shipmentCounts = <?php echo json_encode($shipmentCounts); ?>;
+        <script>
+            const shipmentCounts = <?php echo json_encode($shipmentCounts); ?>;
 
 
-                const methodCtx = document.getElementById('shipmentMethodChart').getContext('2d');
+            const methodCtx = document.getElementById('shipmentMethodChart').getContext('2d');
 
-                // Bar chart for shipment method counts
-                new Chart(methodCtx, {
-                    type: 'bar',
-                    data: {
-                        labels: Object.keys(shipmentCounts),
-                        datasets: [{
-                            label: 'Number of Shipments per Method',
-                            data: Object.values(shipmentCounts),
-                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            borderWidth: 1
-                        }]
+            // Bar chart for shipment method counts
+            new Chart(methodCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(shipmentCounts),
+                    datasets: [{
+                        label: 'Number of Shipments per Method',
+                        data: Object.values(shipmentCounts),
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Total Number of Each Shipping Method'
+                        }
                     },
-                    options: {
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
                             title: {
                                 display: true,
-                                text: 'Total Number of Each Shipping Method'
+                                text: 'Number of Shipments'
                             }
                         },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Number of Shipments'
-                                }
-                            },
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Shipment Method'
-                                }
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Shipment Method'
                             }
                         }
                     }
-                });
+                }
+            });
 
 
-            </script>
+        </script>
     </div>
     </div>
 

@@ -202,29 +202,29 @@
 
             $storeID = 0;  // Initialize the storeID variable
             $applicants = [];  // Initialize an empty array to store applicant data
+            
+            // Prepare and execute the SQL query
+            $query = $conn->prepare("SELECT Applicant_First_Name, Applicant_Last_Name, Applicant_Phone, Application_Status FROM human_resources WHERE Store_ID = ?");
+            if ($query) {
+                $query->bind_param("i", $storeID);
+                $query->execute();
 
-                // Prepare and execute the SQL query
-                $query = $conn->prepare("SELECT Applicant_First_Name, Applicant_Last_Name, Applicant_Phone, Application_Status FROM human_resources WHERE Store_ID = ?");
-                if ($query) {
-                    $query->bind_param("i", $storeID);
-                    $query->execute();
+                // Bind result variables
+                $query->bind_result($firstName, $lastName, $phone, $status);
 
-                    // Bind result variables
-                    $query->bind_result($firstName, $lastName, $phone, $status);
-
-                    // Fetch values
-                    while ($query->fetch()) {
-                        $applicants[] = [
-                            'Applicant_First_Name' => $firstName,
-                            'Applicant_Last_Name' => $lastName,
-                            'Applicant_Phone' => $phone,
-                            'Application_Status' => $status
-                        ];
-                    }
-                    $query->close();
-                } else {
-                    echo "Failed to prepare the query: " . htmlspecialchars($conn->error);
+                // Fetch values
+                while ($query->fetch()) {
+                    $applicants[] = [
+                        'Applicant_First_Name' => $firstName,
+                        'Applicant_Last_Name' => $lastName,
+                        'Applicant_Phone' => $phone,
+                        'Application_Status' => $status
+                    ];
                 }
+                $query->close();
+            } else {
+                echo "Failed to prepare the query: " . htmlspecialchars($conn->error);
+            }
             $conn->close();
             ?>
 
@@ -255,6 +255,54 @@
         </div>
         <div class="division erp-store-management" style="color:black">
             Store Management<br>(Graph/Table Placeholder)
+
+            <?php
+            ini_set('display_errors', 1);
+            error_reporting(E_ALL);
+
+            $server = 'mydb.ics.purdue.edu';
+            $dbname = 'g1130865';
+            $username = 'g1130865';
+            $password = 'GroupNine';
+            $storeID = 0;
+
+            $conn = new mysqli($server, $username, $password, $dbname);
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            $query = $conn->prepare("SELECT User_ID, First_Name, Last_Name FROM users WHERE Store_ID = ?");
+            $query->bind_param("i", $storeID);
+            $query->execute();
+
+            // Bind the result variables
+            $userID = $firstName = $lastName = null;
+            $query->bind_result($userID, $firstName, $lastName);
+
+            // Start the table
+            $tableData = "<table border='1'><tr><th>User ID</th><th>First Name</th><th>Last Name</th></tr>";
+            $resultFound = false;
+
+            // Fetch values
+            while ($query->fetch()) {
+                $resultFound = true;
+                $tableData .= "<tr><td>" . htmlspecialchars($userID) . "</td><td>" . htmlspecialchars($firstName) . "</td><td>" . htmlspecialchars($lastName) . "</td></tr>";
+            }
+
+            if (!$resultFound) {
+                $tableData .= "<tr><td colspan='3'>0 results</td></tr>";
+            }
+
+            $tableData .= "</table>";
+
+            $query->close();
+            $conn->close();
+            ?>
+
+            <h1>Employee List</h1>
+            <!-- Display the table with results -->
+            <?php echo $tableData; ?>
+
         </div>
         <div class="division crm-sales" style="color:black">
             Sales<br>(Graph/Table Placeholder)
