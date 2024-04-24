@@ -16,20 +16,20 @@ if ($conn->connect_error) {
 }
 
 $sql = "SELECT Placement_Date, Arrival_Date, Product_ID, Product_Order_Price, Order_ID FROM order_management WHERE Store_ID = ?";
-$stmt = $conn->prepare($sql);
-if ($stmt) {
-    $stmt->bind_param("i", $storeID);
-    $stmt->execute();
+$query = $conn->prepare($sql);
+if ($query) {
+    $query->bind_param("i", $storeID);
+    $query->execute();
 
     // Bind the result variables
-    $stmt->bind_result($placementDate, $arrivalDate, $productID, $productOrderPrice, $orderID);
+    $query->bind_result($placementDate, $arrivalDate, $productID, $productOrderPrice, $orderID);
 
     // Start the table
     $tableData = "<table border='1'><tr><th>Placement Date</th><th>Arrival Date</th><th>Product ID</th><th>Product Order Price</th><th>Order ID</th></tr>";
     $hasResults = false;
 
     // Fetch values
-    while ($stmt->fetch()) {
+    while ($query->fetch()) {
         $hasResults = true;
         $tableData .= "<tr><td>" . htmlspecialchars($placementDate) . "</td><td>" . htmlspecialchars($arrivalDate) . "</td><td>" . htmlspecialchars($productID) . "</td><td>" . htmlspecialchars($productOrderPrice) . "</td><td>" . htmlspecialchars($orderID) . "</td></tr>";
     }
@@ -37,7 +37,7 @@ if ($stmt) {
         $tableData .= "<tr><td colspan='5'>0 results</td></tr>";
     }
     $tableData .= "</table>";
-    $stmt->close();
+    $query->close();
 } else {
     $tableData = "Error preparing statement: " . htmlspecialchars($conn->error);
 }

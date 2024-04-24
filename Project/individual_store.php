@@ -67,129 +67,129 @@
     </div>
     <div class="content-container">
         <div class="division erp-human-resources" style="color:black">
-        <div style="width: 500px; height: 400px; margin: 0 auto; overflow-y: auto;">
-            <?php
-            ini_set('display_errors', 1);
-            error_reporting(E_ALL);
+            <div style="width: 500px; height: 400px; margin: 0 auto; overflow-y: auto;">
+                <?php
+                ini_set('display_errors', 1);
+                error_reporting(E_ALL);
 
-            $server = 'mydb.ics.purdue.edu';
-            $dbname = 'g1130865';
-            $username = 'g1130865';
-            $password = 'GroupNine';
+                $server = 'mydb.ics.purdue.edu';
+                $dbname = 'g1130865';
+                $username = 'g1130865';
+                $password = 'GroupNine';
 
-            $conn = new mysqli($server, $username, $password, $dbname);
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
+                $conn = new mysqli($server, $username, $password, $dbname);
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
 
-            $storeID = isset($_GET['storeID']) ? $_GET['storeID'] : null;
-            $applicants = [];  // Initialize an empty array to store applicant data
-            
+                $storeID = isset($_GET['storeID']) ? $_GET['storeID'] : null;
+                $applicants = [];  // Initialize an empty array to store applicant data
+                
 
-            // Prepare and execute the SQL query
-            $query = $conn->prepare("SELECT Applicant_First_Name, Applicant_Last_Name, Applicant_Phone, Application_Status FROM human_resources WHERE Store_ID = ?");
-            if ($query) {
+                // Prepare and execute the SQL query
+                $query = $conn->prepare("SELECT Applicant_First_Name, Applicant_Last_Name, Applicant_Phone, Application_Status FROM human_resources WHERE Store_ID = ?");
+                if ($query) {
+                    $query->bind_param("i", $storeID);
+                    $query->execute();
+
+                    // Bind result variables
+                    $query->bind_result($firstName, $lastName, $phone, $status);
+
+                    // Fetch values
+                    while ($query->fetch()) {
+                        $applicants[] = [
+                            'Applicant_First_Name' => $firstName,
+                            'Applicant_Last_Name' => $lastName,
+                            'Applicant_Phone' => $phone,
+                            'Application_Status' => $status
+                        ];
+                    }
+                    $query->close();
+                } else {
+                    echo "Failed to prepare the query: " . htmlspecialchars($conn->error);
+                }
+
+                $conn->close();
+                ?>
+
+                <h1>Applicant Information Viewer</h1>
+
+                <?php if (!empty($applicants)): ?>
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Phone Number</th>
+                                <th>Application Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($applicants as $applicant): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($applicant['Applicant_First_Name']); ?></td>
+                                    <td><?php echo htmlspecialchars($applicant['Applicant_Last_Name']); ?></td>
+                                    <td><?php echo htmlspecialchars($applicant['Applicant_Phone']); ?></td>
+                                    <td><?php echo htmlspecialchars($applicant['Application_Status']); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php endif; ?>
+
+            </div>
+        </div>
+        <div class="division erp-store-management" style="color:black">
+            <div style="width: 250px; height: 400px; margin: 0 auto; overflow-y: auto;">
+
+                <?php
+                ini_set('display_errors', 1);
+                error_reporting(E_ALL);
+
+                $server = 'mydb.ics.purdue.edu';
+                $dbname = 'g1130865';
+                $username = 'g1130865';
+                $password = 'GroupNine';
+                $storeID = isset($_GET['storeID']) ? $_GET['storeID'] : null;
+
+                $conn = new mysqli($server, $username, $password, $dbname);
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+
+                $query = $conn->prepare("SELECT User_ID, First_Name, Last_Name FROM users WHERE Store_ID = ?");
                 $query->bind_param("i", $storeID);
                 $query->execute();
 
-                // Bind result variables
-                $query->bind_result($firstName, $lastName, $phone, $status);
+                // Bind the result variables
+                $userID = $firstName = $lastName = null;
+                $query->bind_result($userID, $firstName, $lastName);
+
+                // Start the table
+                $tableData = "<table border='1'><tr><th>User ID</th><th>First Name</th><th>Last Name</th></tr>";
+                $resultFound = false;
 
                 // Fetch values
                 while ($query->fetch()) {
-                    $applicants[] = [
-                        'Applicant_First_Name' => $firstName,
-                        'Applicant_Last_Name' => $lastName,
-                        'Applicant_Phone' => $phone,
-                        'Application_Status' => $status
-                    ];
+                    $resultFound = true;
+                    $tableData .= "<tr><td>" . htmlspecialchars($userID) . "</td><td>" . htmlspecialchars($firstName) . "</td><td>" . htmlspecialchars($lastName) . "</td></tr>";
                 }
+
+                if (!$resultFound) {
+                    $tableData .= "<tr><td colspan='3'>0 results</td></tr>";
+                }
+
+                $tableData .= "</table>";
+
                 $query->close();
-            } else {
-                echo "Failed to prepare the query: " . htmlspecialchars($conn->error);
-            }
+                $conn->close();
+                ?>
 
-            $conn->close();
-            ?>
-
-            <h1>Applicant Information Viewer</h1>
-
-            <?php if (!empty($applicants)): ?>
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Phone Number</th>
-                            <th>Application Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($applicants as $applicant): ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($applicant['Applicant_First_Name']); ?></td>
-                                <td><?php echo htmlspecialchars($applicant['Applicant_Last_Name']); ?></td>
-                                <td><?php echo htmlspecialchars($applicant['Applicant_Phone']); ?></td>
-                                <td><?php echo htmlspecialchars($applicant['Application_Status']); ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php endif; ?>
-
-        </div>
-        </div>
-        <div class="division erp-store-management" style="color:black">
-        <div style="width: 250px; height: 400px; margin: 0 auto; overflow-y: auto;">
-
-            <?php
-            ini_set('display_errors', 1);
-            error_reporting(E_ALL);
-
-            $server = 'mydb.ics.purdue.edu';
-            $dbname = 'g1130865';
-            $username = 'g1130865';
-            $password = 'GroupNine';
-            $storeID = isset($_GET['storeID']) ? $_GET['storeID'] : null;
-
-            $conn = new mysqli($server, $username, $password, $dbname);
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
-
-            $query = $conn->prepare("SELECT User_ID, First_Name, Last_Name FROM users WHERE Store_ID = ?");
-            $query->bind_param("i", $storeID);
-            $query->execute();
-
-            // Bind the result variables
-            $userID = $firstName = $lastName = null;
-            $query->bind_result($userID, $firstName, $lastName);
-
-            // Start the table
-            $tableData = "<table border='1'><tr><th>User ID</th><th>First Name</th><th>Last Name</th></tr>";
-            $resultFound = false;
-
-            // Fetch values
-            while ($query->fetch()) {
-                $resultFound = true;
-                $tableData .= "<tr><td>" . htmlspecialchars($userID) . "</td><td>" . htmlspecialchars($firstName) . "</td><td>" . htmlspecialchars($lastName) . "</td></tr>";
-            }
-
-            if (!$resultFound) {
-                $tableData .= "<tr><td colspan='3'>0 results</td></tr>";
-            }
-
-            $tableData .= "</table>";
-
-            $query->close();
-            $conn->close();
-            ?>
-
-            <h1>Employee List</h1>
-            <?php echo $tableData; ?>
+                <h1>Employee List</h1>
+                <?php echo $tableData; ?>
 
 
-        </div>
+            </div>
         </div>
         <div class="division crm-sales" style="color:black">
             Sales<br>(Graph/Table Placeholder)
@@ -215,6 +215,25 @@
 
             // Execute the query for average service time
             $resultTime = mysqli_query($connection, $queryTime);
+
+            $sql = "SELECT Service_Type, COUNT(*) AS Count FROM customer_service WHERE Store_ID = ? GROUP BY Service_Type";
+            $query = $connection->prepare($sql);
+            if ($query) {
+                $query->bind_param("i", $storeID);
+                $query->execute();
+
+                // Bind variables to prepare for fetching
+                $query->bind_result($serviceType, $count);
+
+                // Fetch values and populate the array
+                while ($query->fetch()) {
+                    $serviceData[$serviceType] = $count;
+                }
+
+                $query->close();
+            } else {
+                echo "Prepare failed: (" . $conn->errno . ") " . $conn->error;
+            }
 
             // Close the database connection
             mysqli_close($connection);
@@ -277,133 +296,180 @@
                     ?>
                 </span>
             </div>
-            Customer Service<br>(Graph/Table Placeholder)
+            <canvas id="serviceTypeChart"></canvas>
+
+            <script>
+                const ctx = document.getElementById('serviceTypeChart').getContext('2d');
+                const serviceData = <?php echo json_encode($serviceData); ?>;
+                const serviceTypes = Object.keys(serviceData);
+                const serviceCounts = Object.values(serviceData);
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: serviceTypes,
+                        datasets: [{
+                            label: 'Number of Services',
+                            data: serviceCounts,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            title: {
+                                display: true,
+                                text: 'Distribution of Service Inquiries by Type'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Number of Inquiries'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Service Type'
+                                }
+                            }
+                        }
+                    }
+                });
+            </script>
         </div>
         <div class="division scm-inventory-management" style="color:black">
-        <div style="width: 200px; height: 400px; margin: 0 auto; overflow-y: auto;">
+            <div style="width: 200px; height: 400px; margin: 0 auto; overflow-y: auto;">
+                <?php
+                ini_set('display_errors', 1);
+                error_reporting(E_ALL);
+
+                $server = 'mydb.ics.purdue.edu';  // Your database host
+                $dbname = 'g1130865';  // Your database name
+                $username = 'g1130865';  // Your database username
+                $password = 'GroupNine';  // Your database password
+                $storeID = isset($_GET['storeID']) ? $_GET['storeID'] : null;
+
+                // Create connection
+                $conn = new mysqli($server, $username, $password, $dbname);
+
+                // Check connection
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+
+                $inventory = [];
+
+                // Prepare and execute the SQL query for inventory
+                $query = $conn->prepare("SELECT Product_ID, Quantity FROM inventory_management WHERE Store_ID = ?");
+                if ($query) {
+                    $query->bind_param("i", $storeID);
+                    $query->execute();
+
+                    // Bind variables to the prepared statement as result variables
+                    $query->bind_result($productID, $quantity);
+
+                    // Fetch values one by one
+                    while ($query->fetch()) {
+                        $inventory[] = [
+                            'Product_ID' => $productID,
+                            'Quantity' => $quantity
+                        ];
+                    }
+                    $query->close();
+                } else {
+                    echo "Failed to prepare the query: " . htmlspecialchars($conn->error);
+                }
+
+                $conn->close();
+                ?>
+
+                <h1>Inventory Viewer</h1>
+
+                <?php if (!empty($inventory)): ?>
+
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th>Product ID</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($inventory as $item): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($item['Product_ID']); ?></td>
+                                    <td><?php echo htmlspecialchars($item['Quantity']); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+    <div class="division scm-order-management" style="color:black">
+        <div style="width: 500px; height: 400px; margin: 0 auto; overflow-y: auto;">
             <?php
             ini_set('display_errors', 1);
             error_reporting(E_ALL);
 
-            $server = 'mydb.ics.purdue.edu';  // Your database host
-            $dbname = 'g1130865';  // Your database name
-            $username = 'g1130865';  // Your database username
-            $password = 'GroupNine';  // Your database password
+            $server = 'mydb.ics.purdue.edu';
+            $dbname = 'g1130865';
+            $username = 'g1130865';
+            $password = 'GroupNine';
+            $tableData = "";
+
             $storeID = isset($_GET['storeID']) ? $_GET['storeID'] : null;
 
-            // Create connection
             $conn = new mysqli($server, $username, $password, $dbname);
-
-            // Check connection
             if ($conn->connect_error) {
                 die("Connection failed: " . $conn->connect_error);
             }
 
-            $inventory = [];
-
-            // Prepare and execute the SQL query for inventory
-            $query = $conn->prepare("SELECT Product_ID, Quantity FROM inventory_management WHERE Store_ID = ?");
+            $sql = "SELECT Placement_Date, Arrival_Date, Product_ID, Product_Order_Price, Order_ID FROM order_management WHERE Store_ID = ?";
+            $query = $conn->prepare($sql);
             if ($query) {
                 $query->bind_param("i", $storeID);
                 $query->execute();
 
-                // Bind variables to the prepared statement as result variables
-                $query->bind_result($productID, $quantity);
+                // Bind the result variables
+                $query->bind_result($placementDate, $arrivalDate, $productID, $productOrderPrice, $orderID);
 
-                // Fetch values one by one
+                // Start the table
+                $tableData = "<table border='1'><tr><th>Placement Date</th><th>Arrival Date</th><th>Product ID</th><th>Product Order Price</th><th>Order ID</th></tr>";
+                $hasResults = false;
+
+                // Fetch values
                 while ($query->fetch()) {
-                    $inventory[] = [
-                        'Product_ID' => $productID,
-                        'Quantity' => $quantity
-                    ];
+                    $hasResults = true;
+                    $tableData .= "<tr><td>" . htmlspecialchars($placementDate) . "</td><td>" . htmlspecialchars($arrivalDate) . "</td><td>" . htmlspecialchars($productID) . "</td><td>" . htmlspecialchars($productOrderPrice) . "</td><td>" . htmlspecialchars($orderID) . "</td></tr>";
                 }
+                if (!$hasResults) {
+                    $tableData .= "<tr><td colspan='5'>0 results</td></tr>";
+                }
+                $tableData .= "</table>";
                 $query->close();
             } else {
-                echo "Failed to prepare the query: " . htmlspecialchars($conn->error);
+                $tableData = "Error preparing statement: " . htmlspecialchars($conn->error);
             }
-
             $conn->close();
+
             ?>
 
-            <h1>Inventory Viewer</h1>
+            <h1>Store Order Details</h1>
 
-            <?php if (!empty($inventory)): ?>
+            <!-- Display the table with results if any -->
+            <?php echo $tableData; ?>
 
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>Product ID</th>
-                            <th>Quantity</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($inventory as $item): ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($item['Product_ID']); ?></td>
-                                <td><?php echo htmlspecialchars($item['Quantity']); ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php endif; ?>
         </div>
-    </div>
-                        </div>
-    <div class="division scm-order-management" style="color:black">
-    <div style="width: 500px; height: 400px; margin: 0 auto; overflow-y: auto;">
-        <?php
-        ini_set('display_errors', 1);
-        error_reporting(E_ALL);
-
-        $server = 'mydb.ics.purdue.edu';
-        $dbname = 'g1130865';
-        $username = 'g1130865';
-        $password = 'GroupNine';
-        $tableData = "";
-
-        $storeID = isset($_GET['storeID']) ? $_GET['storeID'] : null;
-
-        $conn = new mysqli($server, $username, $password, $dbname);
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
-
-        $sql = "SELECT Placement_Date, Arrival_Date, Product_ID, Product_Order_Price, Order_ID FROM order_management WHERE Store_ID = ?";
-        $stmt = $conn->prepare($sql);
-        if ($stmt) {
-            $stmt->bind_param("i", $storeID);
-            $stmt->execute();
-
-            // Bind the result variables
-            $stmt->bind_result($placementDate, $arrivalDate, $productID, $productOrderPrice, $orderID);
-
-            // Start the table
-            $tableData = "<table border='1'><tr><th>Placement Date</th><th>Arrival Date</th><th>Product ID</th><th>Product Order Price</th><th>Order ID</th></tr>";
-            $hasResults = false;
-
-            // Fetch values
-            while ($stmt->fetch()) {
-                $hasResults = true;
-                $tableData .= "<tr><td>" . htmlspecialchars($placementDate) . "</td><td>" . htmlspecialchars($arrivalDate) . "</td><td>" . htmlspecialchars($productID) . "</td><td>" . htmlspecialchars($productOrderPrice) . "</td><td>" . htmlspecialchars($orderID) . "</td></tr>";
-            }
-            if (!$hasResults) {
-                $tableData .= "<tr><td colspan='5'>0 results</td></tr>";
-            }
-            $tableData .= "</table>";
-            $stmt->close();
-        } else {
-            $tableData = "Error preparing statement: " . htmlspecialchars($conn->error);
-        }
-        $conn->close();
-
-        ?>
-
-        <h1>Store Order Details</h1>
-
-        <!-- Display the table with results if any -->
-        <?php echo $tableData; ?>
-
-    </div>
     </div>
     <div class="division scm-transportation-management" style="color:black">
         <?php
@@ -443,16 +509,17 @@
         $conn->close();
         ?>
 
-<div style="display: flex; justify-content: center; align-items: center;">
-    <div>
-        <h1 style="text-align: center;">Transportation Management Statistics</h1>
-        <div style="display: flex; justify-content: center; align-items: center; height: 300px; width: 600px;"> <!-- Adjust height and width as needed -->
-            <div class="chart-container" style="width: 100%; height: 100%;">
-                <canvas id="shipmentMethodChart"></canvas>
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <div>
+                <h1 style="text-align: center;">Transportation Management Statistics</h1>
+                <div style="display: flex; justify-content: center; align-items: center; height: 300px; width: 600px;">
+                    <!-- Adjust height and width as needed -->
+                    <div class="chart-container" style="width: 100%; height: 100%;">
+                        <canvas id="shipmentMethodChart"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
 
         <script>
