@@ -144,7 +144,7 @@ if (count($existingMemberIDs) > 0) {
     $conn->close();
 } else {
     // If no MemberIDs are available, refresh the page
-    echo "<script>alert('MemberIDs have been added. Refresh the page to generate all data');</script>";
+    echo "<script>alert('MemberIDs have been added. Refreshing page to generate all data');</script>";
     echo "<script>setTimeout(function(){ location.reload(); }, 100);</script>"; // Reload the page after 2 seconds
 }
 
